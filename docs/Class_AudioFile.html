@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+  
+  
+  
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+  <title>Class AudioFile</title>
+
+  
+
+</head><body><br>
+
+
+
+
+<br>
+
+
+
+
+<br>
+
+
+
+
+<h3>class ID3::AudioFile</h3>
+
+
+
+ID3-tags can be attached to more than just MP3-files, that's why
+AudioFile has no knowledge about the MP3-standard.&nbsp; If you want to
+include it, you can derive your own class and add that functionality.<br>
+
+
+
+<br>
+
+
+
+<h4>
+Provided Functionality:
+</h4>
+
+
+
+<ul>
+
+
+
+
+  <li>Reads and parses audio files for ID3-tags</li>
+  <li>Writes audio files and attaches ID3-tags to them</li><li>Keeps track of complete path name to audio file</li><li>Keeps track of where the raw audio portion of an audio-file is<br>
+  </li>
+
+
+  <li>Top-level interface to ID3-tags</li>
+</ul>
+
+
+
+<h4>Instance Variables:</h4>
+
+
+
+<ul>
+
+
+
+  <li>pwd , filename&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; #
+working directory and path/name of the file when it was opened..</li>
+  <li>dirname, basename&nbsp;&nbsp;&nbsp; # absolute dirname and basename of the file<br>
+  </li>
+  <li>tagID3v1 , tagID3v2&nbsp;&nbsp;&nbsp;&nbsp; # the ID3-tags , if not present these are nil<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+# should they be renamed to tag1 and tag2 ? <br>
+</li>
+</ul>
+
+
+
+<br>
+
+
+
+<h4>Instance Methods:</h4>
+
+
+<ul>
+
+
+  <li>new</li>
+  <li>audioMD5sum</li>
+  <li>writeMD5sum</li><li>verifyMD5sum<br>
+  </li>
+  <li>version / versions<br>
+  </li>
+
+</ul>
+
+
+<br>
+
+
+<h4>Examples:</h4>
+
+<pre><br>	&gt; a = ID3::AudioFile.new("mp3/a.mp3")<br>	=&gt; #&lt;ID3::AudioFile:0x402714ec @pwd="/home/tilo/Ruby/ID3", @tagID3v1={"ARTIST"=&gt;"Wolfsheim", "ALBUM"=&gt;"", "TITLE"=&gt;"Sleep Somehow", "YEAR"=&gt;"", "GENREID"=&gt;"255", "COMMENT"=&gt;""}, @audioMD5sum=nil, @filename="mp3/a.mp3", @basename="a.mp3", @audioEndX=1433600, @dirname="/home/tilo/Ruby/ID3/mp3", @audioStartX=1418, @tagID3v2={"ARTIST"=&gt;{"encoding"=&gt;0, "text"=&gt;"Wolfsheim"}, "SONGLEN"=&gt;{"encoding"=&gt;0, "text"=&gt;"193567"}, "CONTENTTYPE"=&gt;{"encoding"=&gt;0, "text"=&gt;"newage"}, "ALBUM"=&gt;{"encoding"=&gt;0, "text"=&gt;"Spectators"}, "TRACKNUM"=&gt;{"encoding"=&gt;0, "text"=&gt;"6"}, "TITLE"=&gt;{"encoding"=&gt;0, "text"=&gt;"Sleep Somehow"}, "MEDIATYPE"=&gt;{"encoding"=&gt;0, "text"=&gt;"DIG"}}&gt;<br><br>	&gt; a.version<br>	=&gt; "1.0 2.3.0"<br><br>	&gt; a.tagID3v1<br>	=&gt; {"ARTIST"=&gt;"Wolfsheim", "ALBUM"=&gt;"", "TITLE"=&gt;"Sleep Somehow", "YEAR"=&gt;"", "GENREID"=&gt;"255", "COMMENT"=&gt;""}<br><br>	&gt; a.tagID3v2<br>	=&gt; {"ARTIST"=&gt;{"encoding"=&gt;0, "text"=&gt;"Wolfsheim"}, "SONGLEN"=&gt;{"encoding"=&gt;0, "text"=&gt;"193567"}, "CONTENTTYPE"=&gt;{"encoding"=&gt;0, "text"=&gt;"newage"}, "ALBUM"=&gt;{"encoding"=&gt;0, "text"=&gt;"Spectators"}, "TRACKNUM"=&gt;{"encoding"=&gt;0, "text"=&gt;"6"}, "TITLE"=&gt;{"encoding"=&gt;0, "text"=&gt;"Sleep Somehow"}, "MEDIATYPE"=&gt;{"encoding"=&gt;0, "text"=&gt;"DIG"}}<br><br><br></pre>
+
+
+
+
+</body></html>

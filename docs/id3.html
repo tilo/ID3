@@ -1,0 +1,245 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+  <title>id3.rb - ID3 Library for Ruby</title>
+
+  
+
+</head>
+<body><br>
+
+
+
+
+
+
+
+<center>
+<h1><font color="#ff0000">Pre-Beta Release</font><br>
+</h1>
+<h1>id3.rb - ID3 Library for Ruby<br><font size="-3">by Tilo Sloboda &lt;tools-NOSPAM@unixgods.org&gt;<br>
+</font></h1>
+
+</center>
+
+
+
+
+
+<h3><font color="#ff0000">Feedback Needed</font></h3>
+
+
+
+Currently I would like to get feedback on the interface, classes, methods provided by the ID3-library.
+<p>
+Please send me <a href="mailto:tools-NOSPAM@unixgods.org">email</a> and let me know what you think..<br>
+</p>
+
+<p><br>
+<br>
+</p>
+
+<h3>Introduction</h3>
+
+
+
+
+
+
+The aim of this ID3 library for Ruby is to do a full <b>native Ruby
+implementation </b>of ID3 version 1.x and version 2.x , without any use of
+binary libraries, which other implementations need to have installed
+separately.&nbsp;&nbsp;&nbsp; e.g. other implementations just act as a
+wrapper around a binary library - I beleive that this is not as
+portable as a Ruby library should be.<br>
+
+
+
+
+
+Another aim of this implementation is to provide the user with a
+uniform API, which tries to hide the details of the different ID3 standards,
+therefore making it (hopefully) easier to use.<br>
+
+&nbsp;<br>
+
+
+<h3>Supported Versions</h3>
+
+
+ID3 v1.0 , v1.1 , v2.2.x , v2.3.x and v2.4.x<br>
+
+
+<br>
+
+
+
+
+
+<h3>ID3 Library Overview</h3>
+
+
+
+
+
+The library provides  the <a href="Module_ID3.html">Module ID3</a> , which provides some module methods, as well as three simple classes to the user:&nbsp;&nbsp;
+<a href="Class_AudioFile.html">AudioFile</a>, <a href="Class_Tag1.html">Tag1</a> and <a href="Class_Tag2.html">Tag2</a>, to handle files which contain ID3-tags.<br>
+
+
+
+<br>
+
+
+
+The ID3-standards are overloaded with specially coded frames, which are different for each of the binary frames<font color="#ff0000"><sup>1</sup></font>.This
+library does not attempt to fully decode each and every frame type, but
+rather deals with the main frame types, such as text and web-frames,
+and in case of the binary frames hands the contents of the frames to
+the user verbatim.&nbsp; If the user chooses to modify or write any of
+those binary frames, the user is expected to know what s/he is doing,
+and how to code/de-code the binary contents, otherwise expect:&nbsp;
+"garbage in --&gt; crash!"&nbsp; of the application which tries to make
+sense of such frames later..&nbsp; However, if an ID3-tag contains
+binary frames, the user can expect that those are handed verbatim to
+the user and that it is safe to write them back 'as is' to a
+new/modified ID3-tag of the same audio file. In some cases the user may
+choose to delete some of the binary frames, that should be possible
+without problems.&nbsp;&nbsp; <br>
+
+
+
+
+
+<br>
+
+
+
+
+<h3>Download</h3>
+
+
+<br>
+
+
+<br>
+
+
+<h3>Known Problems</h3>
+
+
+Some ID3v2 frames may appear more than once in an ID3-tag!&nbsp; e.g.
+TXXX and WXXX. I haven't come across any actual examples for this,
+therefore didn't see the necessity to implement this.&nbsp;&nbsp;
+Currently there is no support for this.&nbsp; If you come across such
+cases, please let me know.. <br>
+
+
+<br>
+
+
+
+
+
+
+<h3>
+
+
+Documentation</h3>
+
+The main id3.rb documentation is here.<br>
+
+
+<br>
+
+
+I complied a comparison between the different <a href="http://www.unixgods.org/%7Etilo/ID3/docs/ID3_comparison.html">ID3-versions</a>, I hope it's helpful.<br>
+
+
+<br>
+
+
+<h3>Disclaimer / Author's Rant</h3>
+
+
+Please feel free to send me "constructive feedback"&nbsp;
+anytime.&nbsp;&nbsp; If you're missing functionality, or you think
+something should be done different, please let me know! I'm always open
+for suggestions. Thank you!<br>
+
+
+<br>
+
+
+IMHO the ID3 version2.x standards are pretty pretty messy... they are
+bloated and&nbsp; overloaded with useless frame-types and
+side-effects...&nbsp;&nbsp; The worst is ID3 v2.4.0!&nbsp; I haven't
+seen any actual v2.4.x tags yet, if you have examples, please send them
+to me. I suspect that the reason why I didn't find any v2.4.x tags
+anywhere is because the "2.4.x standard" is just too complicated, so
+nobody is using it..&nbsp; proove me wrong and email examples to me ;-)<br>
+
+
+<br>
+
+
+Last not least: Please don't complain about the "quality" of the
+ID3-standard to me.. I'm certainly most sympathetic with your pain, but
+not the right person to complain to.. ;-)<br>
+
+
+
+
+<br>
+
+
+
+
+<h3>License</h3>
+
+
+
+
+Freely available under the terms of the OpenSource "Artistic License" in combination with the Addendum A (below)<br>
+
+
+
+
+In case you did not get a copy of the license along with the software,
+it is also available at:&nbsp;&nbsp;
+http://www.unixgods.org/~tilo/artistic-license.html<br>
+
+
+
+
+<p>
+<font color="red">
+
+Addendum A. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM IS WITH YOU. SHOULD THE PROGRAM PROVE
+DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY SERVICING, REPAIR OR CORRECTION. 
+</font></p>
+
+
+
+<p>
+<font color="red">IN NO EVENT WILL THE COPYRIGHT HOLDERS BE LIABLE TO YOU FOR DAMAGES, INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL OR
+CONSEQUENTIAL DAMAGES ARISING OUT OF THE USE OR INABILITY TO USE THE PROGRAM (INCLUDING BUT NOT LIMITED TO
+LOSS OF DATA OR DATA BEING RENDERED INACCURATE OR USELESS OR LOSSES SUSTAINED BY YOU OR THIRD PARTIES OR A FAILURE OF
+THE PROGRAM TO OPERATE WITH ANY OTHER PROGRAMS), EVEN IF THE COPYRIGHT HOLDERS OR OTHER PARTY HAS BEEN ADVISED OF
+THE POSSIBILITY OF SUCH DAMAGES.<br>
+</font></p>
+
+
+
+<p>_________<br><font color="#ff0000">
+1</font>:&nbsp; who came up with all those special frame types? Cheez! KISS!&nbsp; (Keep It Simple, Stupid!)<br>
+ 
+</p>
+
+
+
+<p>
+
+</p>
+
+
+
+</body></html>

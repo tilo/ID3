@@ -1,0 +1,2043 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+  <title>Comparison of ID3 Fields/Frames</title>
+
+  
+
+  
+  
+  
+  <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+</head>
+<body><br>
+
+
+
+<h1 align="center">Comparison of ID3 Standards<br>
+<small><small><small><b>by Tilo Sloboda &lt;tools-NOSPAM@unixgods.org&gt;</b></small></small></small>
+</h1>
+
+
+
+<br>
+
+
+
+This document contains a side-by-side comparison over the frames used in
+the 3 different versions of the informal ID3v2 standard: v2.2.0, v2.3.0 and
+v2.4.0 and the ID3 versions 1.0 and 1.1&nbsp; This document is a compilation of information which is available in the documents
+listed below. The original documents Copyright notices apply.<br>
+
+
+
+<br>
+
+The column "<b>Parsed?</b>" specifies if the Ruby id3.rb library, supports decoding and coding of a specific frame.<br>
+
+<br>
+
+<h3>Original ID3 Documentation</h3>
+
+
+
+
+&nbsp;&nbsp;&nbsp; ID3 v1.0 :&nbsp;&nbsp;&nbsp;&nbsp; http://www.id3.org/id3v1.html<br>
+
+
+
+&nbsp;&nbsp;&nbsp; ID3 v1.1 :&nbsp;&nbsp;&nbsp;&nbsp; http://www.egr.uri.edu/~kovacsp/mp3/ID3-Tag.html<br>
+
+
+
+<br>
+
+
+
+&nbsp;&nbsp;&nbsp; ID3 v2 2.0:&nbsp;&nbsp;&nbsp;&nbsp; http://www.id3.org/id3v2-00.txt<br>
+
+
+
+&nbsp;&nbsp;&nbsp; ID3 v2 3.0:&nbsp;&nbsp;&nbsp;&nbsp; http://www.id3.org/id3v2.3.0.txt<br>
+
+
+
+&nbsp;&nbsp;&nbsp; ID3 v2 4.0:&nbsp;&nbsp;&nbsp;&nbsp; http://www.id3.org/id3v2.4.0-changes.txt<br>
+
+
+
+&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; http://www.id3.org/id3v2.4.0-structure.txt<br>
+
+
+
+&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; http://www.id3.org/id3v2.4.0-frames.txt<br>
+
+
+
+<br>
+
+
+
+Please refer to the original documents listed above, for any information <br>
+
+
+
+regarding the ID3v2 standards.<br>
+
+
+
+<br>
+
+<h3>
+
+
+References</h3>
+
+
+
+
+&nbsp;&nbsp;&nbsp; id3lib-3.8.0&nbsp;&nbsp; id3lib-3.8.0/include/id3/globals.h<br>
+
+<br>
+
+<b>NOTE:<br>
+</b>The symbolic names used in the leftmost column are derived from the names used in id3lib-3.8.0. 
+The symbolic name CRYPTEDMETA is not part of id3lib-3.8.0, and LEADARTIST was shortened to ARTIST.<br>
+
+<p>
+
+
+<table border="1" cellpadding="2" cellspacing="2" width="100%">
+
+
+  <tbody>
+    <tr>
+      <td rowspan="2" colspan="1" valign="middle"><b>SYMBOL / FRAME-NAME<br>
+      </b></td>
+      <td rowspan="1" colspan="2" align="center" valign="top"><b>Byte Range<br>
+      </b></td>
+      <td rowspan="1" colspan="3" align="center" valign="top"><b>Frame Name<br>
+      </b></td>
+      <td rowspan="2" colspan="1" align="center" valign="middle"><b>Parsed?<br>
+      </b></td>
+      <td rowspan="2" colspan="1" valign="middle"><b>Comments<br>
+      </b></td>
+    </tr>
+<tr>
+      
+      <td align="center" valign="top"><b>1.0<br>
+      </b></td>
+      <td align="center" valign="top"><b>1.1<br>
+      </b></td>
+      <td align="center" valign="top"><b>2.2.0<br>
+      </b></td>
+      <td align="center" valign="top"><b>2.3.0<br>
+      </b></td>
+      <td align="center" valign="top"><b>2.4.0<br>
+      </b></td>
+      
+      
+    </tr>
+    <tr>
+      <td valign="top">GENREID<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+      </small></td>
+      <td align="center" valign="middle"><small>127<br>
+      </small></td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td valign="top"><a href="id3v2.3.0.html#id3v1genreid">genre ID</a><br>
+      </td>
+    </tr>
+<tr>
+      <td valign="top">CONTENTGROUP<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2-00.html#TT1">TT1</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.3.0.html#TIT1">TIT1</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.4.0-frames.html#TIT1">TIT1</a><br>
+      </td>
+      <td align="center" valign="top">yes</td>
+      <td valign="top">content group description<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">TITLE<br>
+      </td>
+      <td align="center" valign="middle"><small>3..32<br>
+
+      </small></td>
+      <td align="center" valign="middle"><small>3..32<br>
+
+      </small></td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2-00.html#TT2">TT2</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.3.0.html#TIT2">TIT2</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.4.0-frames.html#TIT2">TIT2</a><br>
+      </td>
+      <td align="center" valign="top">yes</td>
+      <td valign="top">title/songname/content description<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">SUBTITLE<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2-00.html#TT3">TT3</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.3.0.html#TIT3">TIT3</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.4.0-frames.html#TIT3">TIT3</a><br>
+      </td>
+      <td align="center" valign="top">yes</td>
+      <td valign="top">subtitle/description refinement<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">ARTIST<br>
+      </td>
+      <td align="center" valign="middle"><small>33..62<br>
+
+      </small></td>
+      <td align="center" valign="middle"><small>33..62<br>
+
+      </small></td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2-00.html#TP1">TP1</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.3.0.html#TPE1">TPE1</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.4.0-frames.html#TPE1">TPE1</a><br>
+      </td>
+      <td align="center" valign="top">yes</td>
+      <td valign="top">lead performer(s)/soloist(s)<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">BAND<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2-00.html#TP2">TP2</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.3.0.html#TPE2">TPE2</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.4.0-frames.html#TPE2">TPE2</a><br>
+      </td>
+      <td align="center" valign="top">yes</td>
+      <td valign="top">band/orchestra/accompaniment<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">CONDUCTOR<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2-00.html#TP3">TP3</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.3.0.html#TPE3">TPE3</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.4.0-frames.html#TPE3">TPE3</a><br>
+      </td>
+      <td align="center" valign="top">yes</td>
+      <td valign="top">conductor/performer refinement<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">MIXARTIST<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2-00.html#TP4">TP4</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.3.0.html#TPE4">TPE4</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.4.0-frames.html#TPE4">TPE4</a><br>
+      </td>
+      <td align="center" valign="top">yes</td>
+      <td valign="top">interpreted, remixed, modified by<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">COMPOSER<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2-00.html#TCM">TCM</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.3.0.html#TCOM">TCOM</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.4.0-frames.html#TCOM">TCOM</a><br>
+      </td>
+      <td align="center" valign="top">yes</td>
+      <td valign="top">composer<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">LYRICIST<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2-00.html#TXT">TXT</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.3.0.html#TEXT">TEXT</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.4.0-frames.html#TEXT">TEXT</a><br>
+      </td>
+      <td align="center" valign="top">yes</td>
+      <td valign="top">lyricist/text writer<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">LANGUAGE<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2-00.html#TLA">TLA</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.3.0.html#TLAN">TLAN</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.4.0-frames.html#TLAN">TLAN</a><br>
+      </td>
+      <td align="center" valign="top">yes</td>
+      <td valign="top">language(s)<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">CONTENTTYPE<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2-00.html#TCO">TCO</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.3.0.html#TCON">TCON</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.4.0-frames.html#TCON">TCON</a><br>
+      </td>
+      <td align="center" valign="top">yes</td>
+      <td valign="top">content type<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">ALBUM<br>
+      </td>
+      <td align="center" valign="middle"><small>63..92<br>
+
+      </small></td>
+      <td align="center" valign="middle"><small>63..92<br>
+
+      </small></td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2-00.html#TAL">TAL</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.3.0.html#TALB">TALB</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.4.0-frames.html#TALB">TALB</a><br>
+      </td>
+      <td align="center" valign="top">yes</td>
+      <td valign="top">album/movie/show title<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">TRACKNUM<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small>126<br>
+
+      </small></td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2-00.html#TRK">TRK</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.3.0.html#TRCK">TRCK</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.4.0-frames.html#TRCK">TRCK</a><br>
+      </td>
+      <td align="center" valign="top">yes</td>
+      <td valign="top">track number/position in set<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">PARTINSET<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2-00.html#TPA">TPA</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.3.0.html#TPOS">TPOS</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.4.0-frames.html#TPOS">TPOS</a><br>
+      </td>
+      <td align="center" valign="top">yes</td>
+      <td valign="top">part of set<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">ISRC<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2-00.html#TRC">TRC</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.3.0.html#TSRC">TSRC</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.4.0-frames.html#TSRC">TSRC</a><br>
+      </td>
+      <td align="center" valign="top">yes</td>
+      <td valign="top">international standard recording code<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">DATE<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2-00.html#TDA">TDA</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.3.0.html#TDAT">TDAT</a><br>
+      </td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" valign="top">yes
+      </td>
+      <td valign="top">date<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">YEAR<br>
+      </td>
+      <td align="center" valign="middle"><small>93..96<br>
+
+      </small></td>
+      <td align="center" valign="middle"><small>93..96<br>
+
+      </small></td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2-00.html#TYE">TYE</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.3.0.html#TYER">TYER</a><br>
+      </td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" valign="top">yes
+      </td>
+      <td valign="top">year<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">TIME<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2-00.html#TIM">TIM</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.3.0.html#TIME">TIME</a><br>
+      </td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" valign="top">yes
+      </td>
+      <td valign="top">time<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">RECORDINGDATES<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2-00.html#TRD">TRD</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.3.0.html#TRDA">TRDA</a><br>
+      </td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" valign="top">yes
+      </td>
+      <td valign="top">recording dates<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">RECORDINGTIME<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.4.0-frames.html#TDRC">TDRC</a><br>
+      </td>
+      <td align="center" valign="top">raw<br>
+      </td>
+      <td valign="top">recording time<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">ORIGYEAR<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2-00.html#TOR">TOR</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.3.0.html#TORY">TORY</a><br>
+      </td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" valign="top">yes
+      </td>
+      <td valign="top">original release year<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">ORIGRELEASETIME<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.4.0-frames.html#TDOR">TDOR</a><br>
+      </td>
+      <td align="center" valign="top">raw<br>
+      </td>
+      <td valign="top">original release time<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">BPM<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2-00.html#TBP">TBP</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.3.0.html#TBPM">TBPM</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.4.0-frames.html#TBPM">TBPM</a><br>
+      </td>
+      <td align="center" valign="top">yes
+      </td>
+      <td valign="top">beats per minute<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">MEDIATYPE<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2-00.html#TMT">TMT</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.3.0.html#TMED">TMED</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.4.0-frames.html#TMED">TMED</a><br>
+      </td>
+      <td align="center" valign="top">yes
+      </td>
+      <td valign="top">media type<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">FILETYPE<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2-00.html#TFT">TFT</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.3.0.html#TFLT">TFLT</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.4.0-frames.html#TFLT">TFLT</a><br>
+      </td>
+      <td align="center" valign="top">yes
+      </td>
+      <td valign="top">file type<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">COPYRIGHT<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2-00.html#TCR">TCR</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.3.0.html#TCOP">TCOP</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.4.0-frames.html#TCOP">TCOP</a><br>
+      </td>
+      <td align="center" valign="top">yes
+      </td>
+      <td valign="top">copyright message<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">PUBLISHER<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2-00.html#TPB">TPB</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.3.0.html#TPUB">TPUB</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.4.0-frames.html#TPUB">TPUB</a><br>
+      </td>
+      <td align="center" valign="top">yes
+      </td>
+      <td valign="top">publisher<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">ENCODEDBY<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2-00.html#TEN">TEN</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.3.0.html#TENC">TENC</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.4.0-frames.html#TENC">TENC</a><br>
+      </td>
+      <td align="center" valign="top">yes
+      </td>
+      <td valign="top">encoded by<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">ENCODERSETTINGS<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2-00.html#TSS">TSS</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.3.0.html#TSSE">TSSE</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.4.0-frames.html#TSSE">TSSE</a><br>
+      </td>
+      <td align="center" valign="top">yes
+      </td>
+      <td valign="top">software/hardware yes settings for encoding<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">SONGLEN<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2-00.html#TLE">TLE</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.3.0.html#TLEN">TLEN</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.4.0-frames.html#TLEN">TLEN</a><br>
+      </td>
+      <td align="center" valign="top">yes
+      </td>
+      <td valign="top">length (ms)<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">SIZE<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2-00.html#TSI">TSI</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.3.0.html#TSIZ">TSIZ</a><br>
+      </td>
+      <td align="center" bgcolor="#ffffff" valign="top"><br>
+      </td>
+      <td align="center" valign="top">yes
+      </td>
+      <td valign="top">size (bytes)<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">PLAYLISTDELAY<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2-00.html#TDY">TDY</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.3.0.html#TDLY">TDLY</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.4.0-frames.html#TDLY">TDLY</a><br>
+      </td>
+      <td align="center" valign="top">yes
+      </td>
+      <td valign="top">playlist delay<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">INITIALKEY<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2-00.html#TKE">TKE</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.3.0.html#TKEY">TKEY</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.4.0-frames.html#TKEY">TKEY</a><br>
+      </td>
+      <td align="center" valign="top">yes
+      </td>
+      <td valign="top">initial key<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">ORIGALBUM<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2-00.html#TOT">TOT</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.3.0.html#TOAL">TOAL</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.4.0-frames.html#TOAL">TOAL</a><br>
+      </td>
+      <td align="center" valign="top">yes
+      </td>
+      <td valign="top">original album/movie/show title<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">ORIGFILENAME<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2-00.html#TOF">TOF</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.3.0.html#TOFN">TOFN</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.4.0-frames.html#TOFN">TOFN</a><br>
+      </td>
+      <td align="center" valign="top">yes
+      </td>
+      <td valign="top">original filename<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">ORIGARTIST<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2-00.html#TOA">TOA</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.3.0.html#TOPE">TOPE</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.4.0-frames.html#TOPE">TOPE</a><br>
+      </td>
+      <td align="center" valign="top">yes
+      </td>
+      <td valign="top">original artist(s)/performer(s)<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">ORIGLYRICIST<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2-00.html#TOL">TOL</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.3.0.html#TOLY">TOLY</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.4.0-frames.html#TOLY">TOLY</a><br>
+      </td>
+      <td align="center" valign="top">yes
+      </td>
+      <td valign="top">original lyricist(s)/text writer(s)<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">FILEOWNER<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.3.0.html#TOWN">TOWN</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.4.0-frames.html#TOWN">TOWN</a><br>
+      </td>
+      <td align="center" valign="top">yes<br>
+      </td>
+      <td valign="top">file owner/licensee<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">NETRADIOSTATION<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.3.0.html#TRSN">TRSN</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.4.0-frames.html#TRSN">TRSN</a><br>
+      </td>
+      <td align="center" valign="top">yes<br>
+      </td>
+      <td valign="top">internet radio station name<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">NETRADIOOWNER<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.3.0.html#TRSO">TRSO</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.4.0-frames.html#TRSO">TRSO</a><br>
+      </td>
+      <td align="center" valign="top">yes<br>
+      </td>
+      <td valign="top">internet radio station owner<br>
+
+      
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">SETSUBTITLE<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.4.0-frames.html#TSST">TSST</a><br>
+      </td>
+      <td align="center" valign="top">yes<br>
+      </td>
+      <td valign="top">set subtitle<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">MOOD<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.4.0-frames.html#TMOO">TMOO</a><br>
+      </td>
+      <td align="center" valign="top">yes<br>
+      </td>
+      <td valign="top">mood<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">PRODUCEDNOTICE<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.4.0-frames.html#TPRO">TPRO</a><br>
+      </td>
+      <td align="center" valign="top">yes<br>
+      </td>
+      <td valign="top">produced notice<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">ENCODINGTIME<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.4.0-frames.html#TDEN">TDEN</a><br>
+      </td>
+      <td align="center" valign="top">raw<br>
+      </td>
+      <td valign="top">encoding time<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">RELEASETIME<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.4.0-frames.html#TDRL">TDRL</a><br>
+      </td>
+      <td align="center" valign="top">raw<br>
+      </td>
+      <td valign="top">release time<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">TAGGINGTIME<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.4.0-frames.html#TDTG">TDTG</a><br>
+      </td>
+      <td align="center" valign="top">raw<br>
+      </td>
+      <td valign="top">tagging time<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">ALBUMSORTORDER<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.4.0-frames.html#TSOA">TSOA</a><br>
+      </td>
+      <td align="center" valign="top">yes<br>
+      </td>
+      <td valign="top">album sort order<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">PERFORMERSORTORDER<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.4.0-frames.html#TSOP">TSOP</a><br>
+      </td>
+      <td align="center" valign="top">yes<br>
+      </td>
+      <td valign="top">performer sort order<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">TITLESORTORDER<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.4.0-frames.html#TSOT">TSOT</a><br>
+      </td>
+      <td align="center" valign="top">yes<br>
+      </td>
+      <td valign="top">title sort order<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">USERTEXT<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#99ffff" valign="top"><a href="id3v2-00.html#TXX">TXX</a><br>
+      </td>
+      <td align="center" bgcolor="#99ffff" valign="top"><a href="id3v2.3.0.html#TXXX">TXXX</a><br>
+      </td>
+      <td align="center" bgcolor="#99ffff" valign="top"><a href="id3v2.4.0-frames.html#TXXX">TXXX</a><br>
+      </td>
+      <td align="center" valign="top">yes<br>
+      </td>
+      <td valign="top">user defined text information frame<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">WWWAUDIOFILE<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ffffcc" valign="top"><a href="id3v2-00.html#WAF">WAF</a><br>
+      </td>
+      <td align="center" bgcolor="#ffffcc" valign="top"><a href="id3v2.3.0.html#WOAF">WOAF</a><br>
+      </td>
+      <td align="center" bgcolor="#ffffcc" valign="top"><a href="id3v2.4.0-frames.html#WOAF">WOAF</a><br>
+      </td>
+      <td align="center" valign="top">yes<br>
+      </td>
+      <td valign="top">official audio file webpage<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">WWWARTIST<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ffffcc" valign="top"><a href="id3v2-00.html#WAR">WAR</a><br>
+      </td>
+      <td align="center" bgcolor="#ffffcc" valign="top"><a href="id3v2.3.0.html#WOAR">WOAR</a><br>
+      </td>
+      <td align="center" bgcolor="#ffffcc" valign="top"><a href="id3v2.4.0-frames.html#WOAR">WOAR</a><br>
+      </td>
+      <td align="center" valign="top">yes<br>
+      </td>
+      <td valign="top">official artist/performer webpage<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">WWWAUDIOSOURCE<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ffffcc" valign="top"><a href="id3v2-00.html#WAS">WAS</a><br>
+      </td>
+      <td align="center" bgcolor="#ffffcc" valign="top"><a href="id3v2.3.0.html#WOAS">WOAS</a><br>
+      </td>
+      <td align="center" bgcolor="#ffffcc" valign="top"><a href="id3v2.4.0-frames.html#WOAS">WOAS</a><br>
+      </td>
+      <td align="center" valign="top">yes<br>
+      </td>
+      <td valign="top">official audion source webpage<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">WWWCOMMERCIALINFO<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ffffcc" valign="top"><a href="id3v2-00.html#WCM">WCM</a><br>
+      </td>
+      <td align="center" bgcolor="#ffffcc" valign="top"><a href="id3v2.3.0.html#WCOM">WCOM</a><br>
+      </td>
+      <td align="center" bgcolor="#ffffcc" valign="top"><a href="id3v2.4.0-frames.html#WCOM">WCOM</a><br>
+      </td>
+      <td align="center" valign="top">yes
+      </td>
+      <td valign="top">commercial information<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">WWWCOPYRIGHT<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ffffcc" valign="top"><a href="id3v2-00.html#WCP">WCP</a><br>
+      </td>
+      <td align="center" bgcolor="#ffffcc" valign="top"><a href="id3v2.3.0.html#WCOP">WCOP</a><br>
+      </td>
+      <td align="center" bgcolor="#ffffcc" valign="top"><a href="id3v2.4.0-frames.html#WCOP">WCOP</a><br>
+      </td>
+      <td align="center" valign="top">yes
+      </td>
+      <td valign="top">copyright/legal information<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">WWWPUBLISHER<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ffffcc" valign="top"><a href="id3v2-00.html#WPB">WPB</a><br>
+      </td>
+      <td align="center" bgcolor="#ffffcc" valign="top"><a href="id3v2.3.0.html#WPUB">WPUB</a><br>
+      </td>
+      <td align="center" bgcolor="#ffffcc" valign="top"><a href="id3v2.4.0-frames.html#WPUB">WPUB</a><br>
+      </td>
+      <td align="center" valign="top">yes
+      </td>
+      <td valign="top">publishers official webpage<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">WWWRADIOPAGE<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" bgcolor="#ffffcc" valign="top"><a href="id3v2.3.0.html#WORS">WORS</a><br>
+      </td>
+      <td align="center" bgcolor="#ffffcc" valign="top"><a href="id3v2.4.0-frames.html#WORS">WORS</a><br>
+      </td>
+      <td align="center" valign="top">yes
+      </td>
+      <td valign="top">official internet radio station homepage<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">WWWPAYMENT<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" bgcolor="#ffffcc" valign="top"><a href="id3v2.3.0.html#WPAY">WPAY</a><br>
+      </td>
+      <td align="center" bgcolor="#ffffcc" valign="top"><a href="id3v2.4.0-frames.html#WPAY">WPAY</a><br>
+      </td>
+      <td align="center" valign="top">yes
+      </td>
+      <td valign="top">payment<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">WWWUSER<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ffff33" valign="top"><a href="id3v2-00.html#WXX">WXX</a><br>
+      </td>
+      <td align="center" bgcolor="#ffff33" valign="top"><a href="id3v2.3.0.html#WXXX">WXXX</a><br>
+      </td>
+      <td align="center" bgcolor="#ffff33" valign="top"><a href="id3v2.4.0-frames.html#WXXX">WXXX</a><br>
+      </td>
+      <td align="center" valign="top">yes
+      </td>
+      <td valign="top">user defined URL link frame<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">INVOLVEDPEOPLE<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2-00.html#IPL">IPL</a><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.3.0.html#IPLS">IPLS</a><br>
+      </td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" valign="top">yes
+      </td>
+      <td valign="top">involved people list<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">MUSICIANCREDITLIST<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.4.0-frames.html#TMCL">TMCL</a><br>
+      </td>
+      <td align="center" valign="top">raw<br>
+      </td>
+      <td valign="top">musician credits list<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">INVOLVEDPEOPLE2<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" bgcolor="#ccffff" valign="top"><a href="id3v2.4.0-frames.html#TIPL">TIPL</a><br>
+      </td>
+      <td align="center" valign="top">
+      raw<br>
+</td>
+      <td valign="top">involved people list<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">UNSYNCEDLYRICS<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ffee99" valign="top"><a href="id3v2-00.html#ULT">ULT</a><br>
+      </td>
+      <td align="center" bgcolor="#ffee99" valign="top"><a href="id3v2.3.0.html#USLT">USLT</a><br>
+      </td>
+      <td align="center" bgcolor="#ffee99" valign="top"><a href="id3v2.4.0-frames.html#USLT">USLT</a><br>
+      </td>
+      <td align="center" valign="top">yes<br>
+      </td>
+      <td valign="top">unsynchronised lyrics/text transcription<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">COMMENT<br>
+      </td>
+      <td align="center" valign="middle"><small>97..126<br>
+
+      </small></td>
+      <td align="center" valign="middle"><small>97..124<br>
+
+      </small></td>
+      <td align="center" bgcolor="#ffee99" valign="top"><a href="id3v2-00.html#COM">COM</a><br>
+      </td>
+      <td align="center" bgcolor="#ffee99" valign="top"><a href="id3v2.3.0.html#COMM">COMM</a><br>
+      </td>
+      <td align="center" bgcolor="#ffee99" valign="top"><a href="id3v2.4.0-frames.html#COMM">COMM</a><br>
+      </td>
+      <td align="center" valign="top">yes
+      </td>
+      <td valign="top">comments<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">TERMSOFUSE<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" bgcolor="#ffeedd" valign="top"><a href="id3v2.3.0.html#USER">USER</a><br>
+      </td>
+      <td align="center" bgcolor="#ffeedd" valign="top"><a href="id3v2.4.0-frames.html#USER">USER</a><br>
+      </td>
+      <td align="center" valign="top">yes<br>
+      </td>
+      <td valign="top">terms of use<br>
+      </td>
+    </tr>
+    <tr>
+      <td rowspan="1" colspan="8" valign="top"><br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><font color="#000000">UNIQUEFILEID</font><br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+      </small></td>
+      <td align="center" valign="top"><a href="id3v2-00.html#UFI">UFI</a><br>
+      </td>
+      <td align="center" valign="top"><a href="id3v2.3.0.html#UFID">UFID</a><br>
+      </td>
+      <td align="center" valign="top"><a href="id3v2.4.0-frames.html#UFID">UFID</a><br>
+      </td>
+      <td align="center" valign="top">raw<br>
+      </td>
+      <td valign="top">unique file identifier<br>
+      </td>
+    </tr>
+<tr>
+      <td valign="top">CDID<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ffddff" valign="top"><a href="id3v2-00.html#MCI">MCI</a><br>
+      </td>
+      <td align="center" bgcolor="#ffddff" valign="top"><a href="id3v2.3.0.html#MCDI">MCDI</a><br>
+      </td>
+      <td align="center" bgcolor="#ffddff" valign="top"><a href="id3v2.4.0-frames.html#MCDI">MCDI</a><br>
+      </td>
+      <td align="center" valign="top">yes<br>
+      </td>
+      <td valign="top">music CD identifier<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">EVENTTIMING<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ffddff" valign="top"><a href="id3v2-00.html#ETC">ETC</a><br>
+      </td>
+      <td align="center" bgcolor="#ffddff" valign="top"><a href="id3v2.3.0.html#ETCO">ETCO</a><br>
+      </td>
+      <td align="center" bgcolor="#ffddff" valign="top"><a href="id3v2.4.0-frames.html#ETCO">ETCO</a><br>
+      </td>
+      <td align="center" valign="top">raw<br>
+      </td>
+      <td valign="top">event timing codes<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">MPEGLOOKUP<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ffddff" valign="top"><a href="id3v2-00.html#MLL">MLL</a><br>
+      </td>
+      <td align="center" bgcolor="#ffddff" valign="top"><a href="id3v2.3.0.html#MLLT">MLLT</a><br>
+      </td>
+      <td align="center" bgcolor="#ffddff" valign="top"><a href="id3v2.4.0-frames.html#MLLT">MLLT</a><br>
+      </td>
+      <td align="center" valign="top">raw<br>
+      </td>
+      <td valign="top">MPEG location lookup table<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">SYNCEDTEMPO<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ffddff" valign="top"><a href="id3v2-00.html#STC">STC</a><br>
+      </td>
+      <td align="center" bgcolor="#ffddff" valign="top"><a href="id3v2.3.0.html#SYTC">SYTC</a><br>
+      </td>
+      <td align="center" bgcolor="#ffddff" valign="top"><a href="id3v2.4.0-frames.html#SYTC">SYTC</a><br>
+      </td>
+      <td align="center" valign="top">raw<br>
+      </td>
+      <td valign="top">synchronised tempo codes<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">SYNCEDLYRICS<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ffddff" valign="top"><a href="id3v2-00.html#SLT">SLT</a><br>
+      </td>
+      <td align="center" bgcolor="#ffddff" valign="top"><a href="id3v2.3.0.html#SYLT">SYLT</a><br>
+      </td>
+      <td align="center" bgcolor="#ffddff" valign="top"><a href="id3v2.4.0-frames.html#SYLT">SYLT</a><br>
+      </td>
+      <td align="center" valign="top">raw<br>
+      </td>
+      <td valign="top">synchronised lyrics/text<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">VOLUMEADJ<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ffddff" valign="top"><a href="id3v2-00.html#RVA">RVA</a><br>
+      </td>
+      <td align="center" bgcolor="#ffddff" valign="top"><a href="id3v2.3.0.html#RVAD">RVAD</a><br>
+      </td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" valign="top">raw<br>
+      </td>
+      <td valign="top">relative volume adjustment<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">VOLUMEADJ2<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" bgcolor="#ffddff" valign="top"><a href="id3v2.4.0-frames.html#RVA2">RVA2</a><br>
+      </td>
+      <td align="center" valign="top">raw<br>
+      </td>
+      <td valign="top">relative volume adjustment (2)<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">EQUALIZATION<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ffddff" valign="top"><a href="id3v2-00.html#EQU">EQU</a><br>
+      </td>
+      <td align="center" bgcolor="#ffddff" valign="top"><a href="id3v2.3.0.html#EQUA">EQUA</a><br>
+      </td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" valign="top">raw<br>
+      </td>
+      <td valign="top">equalization<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">EQUALIZATION2<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" bgcolor="#ffddff" valign="top"><a href="id3v2.4.0-frames.html#EQU2">EQU2</a><br>
+      </td>
+      <td align="center" valign="top">raw<br>
+      </td>
+      <td valign="top">equalization (2)<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">REVERB<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ffddff" valign="top"><a href="id3v2-00.html#REV">REV</a><br>
+      </td>
+      <td align="center" bgcolor="#ffddff" valign="top"><a href="id3v2.3.0.html#RVRB">RVRB</a><br>
+      </td>
+      <td align="center" bgcolor="#ffddff" valign="top"><a href="id3v2.4.0-frames.html#RVRB">RVRB</a><br>
+      </td>
+      <td align="center" valign="top">raw<br>
+      </td>
+      <td valign="top">reverb<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">PICTURE<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="top"><a href="id3v2-00.html#PIC">PIC</a><br>
+      </td>
+      <td align="center" valign="top"><a href="id3v2.3.0.html#APIC">APIC</a><br>
+      </td>
+      <td align="center" valign="top"><a href="id3v2.4.0-frames.html#APIC">APIC</a><br>
+      </td>
+      <td align="center" valign="top">yes<br>
+      </td>
+      <td valign="top">attached picture<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">GENERALOBJECT<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ffccff" valign="top"><a href="id3v2-00.html#GEO">GEO</a><br>
+      </td>
+      <td align="center" bgcolor="#ffccff" valign="top"><a href="id3v2.3.0.html#GEOB">GEOB</a><br>
+      </td>
+      <td align="center" bgcolor="#ffccff" valign="top"><a href="id3v2.4.0-frames.html#GEOB">GEOB</a><br>
+      </td>
+      <td align="center" valign="top">raw<br>
+      </td>
+      <td valign="top">general encapsulated object<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">PLAYCOUNTER<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ffddff" valign="top"><a href="id3v2-00.html#CNT">CNT</a><br>
+      </td>
+      <td align="center" bgcolor="#ffddff" valign="top"><a href="id3v2.3.0.html#PCNT">PCNT</a><br>
+      </td>
+      <td align="center" bgcolor="#ffddff" valign="top"><a href="id3v2.4.0-frames.html#PCNT">PCNT</a><br>
+      </td>
+      <td align="center" valign="top">yes<br>
+      </td>
+      <td valign="top">play counter<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">POPULARIMETER<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ffddff" valign="top"><a href="id3v2-00.html#POP">POP</a><br>
+      </td>
+      <td align="center" bgcolor="#ffddff" valign="top"><a href="id3v2.3.0.html#POPM">POPM</a><br>
+      </td>
+      <td align="center" bgcolor="#ffddff" valign="top"><a href="id3v2.4.0-frames.html#POPM">POPM</a><br>
+      </td>
+      <td align="center" valign="top">raw<br>
+      </td>
+      <td valign="top">popularimeter<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">BUFFERSIZE<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ffddff" valign="top"><a href="id3v2-00.html#BUF">BUF</a><br>
+      </td>
+      <td align="center" bgcolor="#ffddff" valign="top"><a href="id3v2.3.0.html#RBUF">RBUF</a><br>
+      </td>
+      <td align="center" bgcolor="#ffddff" valign="top"><a href="id3v2.4.0-frames.html#RBUF">RBUF</a><br>
+      </td>
+      <td align="center" valign="top">raw<br>
+      </td>
+      <td valign="top">recommended buffer size<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">CRYPTEDMETA<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="top"><a href="id3v2-00.html#CRM">CRM</a><br>
+      </td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" valign="top">raw<br>
+      </td>
+      <td valign="top">encrypted meta frame<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">AUDIOCRYPTO<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" bgcolor="#ffddff" valign="top"><a href="id3v2-00.html#CRA">CRA</a><br>
+      </td>
+      <td align="center" bgcolor="#ffddff" valign="top"><a href="id3v2.3.0.html#AENC">AENC</a><br>
+      </td>
+      <td align="center" bgcolor="#ffddff" valign="top"><a href="id3v2.4.0-frames.html#AENC">AENC</a><br>
+      </td>
+      <td align="center" valign="top">raw<br>
+      </td>
+      <td valign="top">audio encryption<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">LINKEDINFO<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="top"><a href="id3v2-00.html#LNK">LNK</a><br>
+      </td>
+      <td align="center" valign="top"><a href="id3v2.3.0.html#LINK">LINK</a><br>
+      </td>
+      <td align="center" valign="top"><a href="id3v2.4.0-frames.html#LINK">LINK</a><br>
+      </td>
+      <td align="center" valign="top">raw<br>
+      </td>
+      <td valign="top">linked information<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">POSITIONSYNC<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" bgcolor="#ffddff" valign="top"><a href="id3v2.3.0.html#POSS">POSS</a><br>
+      </td>
+      <td align="center" bgcolor="#ffddff" valign="top"><a href="id3v2.4.0-frames.html#POSS">POSS</a><br>
+      </td>
+      <td align="center" valign="top">raw<br>
+      </td>
+      <td valign="top">position synchronisation frame<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">COMMERCIAL<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" bgcolor="#ffddff" valign="top"><a href="id3v2.3.0.html#COMR">COMR</a><br>
+      </td>
+      <td align="center" bgcolor="#ffddff" valign="top"><a href="id3v2.4.0-frames.html#COMR">COMR</a><br>
+      </td>
+      <td align="center" valign="top">raw<br>
+      </td>
+      <td valign="top">commercial frame<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">CRYPTOREG<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" bgcolor="#ffddff" valign="top"><a href="id3v2.3.0.html#ENCR">ENCR</a><br>
+      </td>
+      <td align="center" bgcolor="#ffddff" valign="top"><a href="id3v2.4.0-frames.html#ENCR">ENCR</a><br>
+      </td>
+      <td align="center" valign="top">raw<br>
+      </td>
+      <td valign="top">encryption method registration<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">GROUPINGREG<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" bgcolor="#ffddff" valign="top"><a href="id3v2.3.0.html#GRID">GRID</a><br>
+      </td>
+      <td align="center" bgcolor="#ffddff" valign="top"><a href="id3v2.4.0-frames.html#GRID">GRID</a><br>
+      </td>
+      <td align="center" valign="top">raw<br>
+      </td>
+      <td valign="top">group indentification registration<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">PRIVATE<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" bgcolor="#ffddff" valign="top"><a href="id3v2.3.0.html#PRIV">PRIV</a><br>
+      </td>
+      <td align="center" bgcolor="#ffddff" valign="top"><a href="id3v2.4.0-frames.html#PRIV">PRIV</a><br>
+      </td>
+      <td align="center" valign="top">raw<br>
+      </td>
+      <td valign="top">private frame<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">OWNERSHIP<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" bgcolor="#99ffff" valign="top"><a href="id3v2.3.0.html#OWNE">OWNE</a><br>
+      </td>
+      <td align="center" bgcolor="#99ffff" valign="top"><a href="id3v2.4.0-frames.html#OWNE">OWNE</a><br>
+      </td>
+      <td align="center" valign="top">raw<br>
+</td>
+      <td valign="top">ownership frame<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">SIGNATURE<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" valign="top"><a href="id3v2.4.0-frames.html#SIGN">SIGN</a><br>
+      </td>
+      <td align="center" valign="top">raw<br>
+      </td>
+      <td valign="top">signature frame<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">SEEKFRAME<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" valign="top"><a href="id3v2.4.0-frames.html#SEEK">SEEK</a><br>
+      </td>
+      <td align="center" valign="top">raw<br>
+      </td>
+      <td valign="top">seek frame<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">AUDIOSEEKPOINT<br>
+      </td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="middle"><small><br>
+
+      </small></td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" valign="top"><br>
+      </td>
+      <td align="center" valign="top"><a href="id3v2.4.0-frames.html#ASPI">ASPI</a><br>
+      </td>
+      <td align="center" valign="top">raw<br>
+      </td>
+      <td valign="top">audio seek point index<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+<br>
+
+
+<br><br>
+
+
+</p>
+<h3>PROBLEMS:</h3>
+
+
+<ul>
+
+
+  <li>TXXX , WXXX: There may be multiple TXXX and WXXX frames in one tag, each one with different description fields..</li>
+  <li>LINK:&nbsp; Link frames are hard to implement<br>
+  </li>
+</ul>
+
+
+<br>
+
+
+<br>
+
+
+<br>
+
+
+
+</body></html>

@@ -33,7 +33,6 @@ def recursiveDirectoryDescend(dir,regexp,action)
        @@fileN += 1
        if file =~ regexp
            # evaluate action
-           @@mp3fileN += 1
            eval action
        end
     end
@@ -45,6 +44,7 @@ end
 def eachSong(filename)
   filename.chomp!
   print "MP3-FILE: #{filename}"
+  @@mp3fileN += 1
 
   if (File.size(filename) == 0)
     puts " -- empty file\n"
@@ -54,24 +54,30 @@ def eachSong(filename)
   v = 0
   tagN = 0
 
-  v = ID3::has_v1_tag?(filename)
-  if v != 0
+  v = ID3::hasID3v1tag?(filename)
+  if v 
     print " -- found ID3-tag version #{v}"
     @@id3versionN[v] += 1
     tagN += 1
   end
 
-  v = ID3::has_v2_tag?(filename)
-  if v != 0
+  v = ID3::hasID3v2tag?(filename)
+  if v 
     print " -- found ID3-tag version #{v}"
     @@id3versionN[v] += 1
     tagN += 1
 
-    tag = ID3::ID3tag.new
-    tag.read_v2(filename)
-    puts "\n" ; print tag.to_s + "\n"
-    tag.keys.each { |field|
-        @@fieldsUsedN[tag.version][field] += 1
+    tag2= ID3::Tag2.new
+    tag2.read(filename)
+
+    size = tag2.raw.size
+    @@sizeSum += size
+    @@sizeMax = size if size > @@sizeMax
+    printf "\ntag-size: %d , tag-keys: %s\n", size, tag2.keys.join(',')
+
+    
+    tag2.keys.each { |field|
+        @@fieldsUsedN[tag2.version][field] += 1
     }
   end
   if tagN == 0
@@ -95,6 +101,9 @@ end
 @@fieldsUsedN["2.3.0"] = Hash.new(0)
 @@fieldsUsedN["2.4.0"] = Hash.new(0)
 
+@@sizeMax = 0
+@@sizeSum = 0
+
 
 @@tagsPerFileN= Array.new(3,0)
 
@@ -111,8 +120,11 @@ Directories checked: #{@@dirN}
 MP3 Files found  : #{@@mp3fileN}
 "
 
+version2tagN = 0
+
 @@id3versionN.keys.each { |v|
   printf "\nnumber of ID3 tags v#{v} : #{@@id3versionN[v]}\n"
+  version2tagN += 1 if v =~ /^2\./
 }
 
 puts "\n"
@@ -131,4 +143,5 @@ ID3::SUPPORTED_SYMBOLS.keys.sort.each{ |v|
 
 }
 
+printf "\nMax v2 Tag Size was: %d , Average Tag Size was: %d\n" , @@sizeMax, (@@sizeSum / version2tagN)
 puts "\n\ndone."

@@ -1,0 +1,167 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+  
+  
+  
+  
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+  <title>Class ID3::Tag2</title>
+
+  
+
+</head>
+<body><br>
+
+
+
+
+
+<br>
+
+
+
+
+
+<br>
+
+
+
+
+
+<h3>class ID3::Tag2</h3>
+
+
+
+This class models version 2.x ID3-tags.<br>
+
+
+
+
+<br>
+
+
+
+
+<h4>
+Provided Functionality:
+</h4>
+
+
+
+
+<ul>
+
+
+
+
+
+  <li>Reads and parses audio files for ID3-tags</li><li>Dumps information contained in the Tag2 object raw into a string<br>
+  </li>
+
+  <li>Writes audio files and attaches ID3-tags to them</li><li>Keeps track of complete path name to audio file</li><li>Keeps track of where the raw audio portion of an audio-file is<br>
+  </li>
+
+
+  <li>Top-level interface to ID3-tags</li>
+</ul>
+
+
+
+
+<h4>Instance Variables:</h4>
+
+
+
+
+<ul>
+
+
+
+
+  
+  
+  <li>version&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # either nil, or a string wtih the version number</li><li>raw&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+# string containing the raw ID3 version 2 tag</li><li>rawflags&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # byte with the binary flags of the ID3 version 2 header</li>
+  <li>flags&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # parsed flags (accessible as a Hash)<br>
+  </li>
+
+
+</ul>
+
+
+
+
+
+
+<h4>Instance Methods:</h4>
+
+
+
+<ul>
+
+
+
+  <li>new</li>
+  <li>read<br>
+</li>
+  <li>write&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # not yet implemented.. <br>
+</li>
+  <li>dump&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # dump the ID3 version 2 tag raw into a string</li>
+
+</ul>
+
+
+<br>
+
+
+
+<h4>Hash-like Access:</h4>
+
+
+
+
+
+When accessing a Tag2 object wtih the Hash syntax, you can access the
+actual data (Frames) in the tag. Please note that there is only a very limited
+number of valid keys, and that the class does not allow "inventing" new
+keys (as those would not correspond to valid ID3-Frames and would not be defined in the ID3 definition)<br>
+
+
+
+
+
+<br>
+To see which symbolic names (keys) are allowed, please check&nbsp;<b> ID3::SUPPORTED_SYMBOLS[version].keys</b><br>
+
+
+
+
+
+<h4>Examples:</h4>
+
+
+
+
+
+<pre>	&gt; require 'id3'<br>	=&gt; true<br><br>	&gt; t = ID3::Tag2.new<br>	=&gt; {}<br><br>	&gt; t.read("mp3/d.mp3")<br>	=&gt; true<br><br>	&gt; t.version<br>	=&gt; "2.3.0"<br><br>	&gt; t.keys<br>	=&gt; ["ARTIST", "SONGLEN", "CONTENTTYPE", "ALBUM", "TRACKNUM", "TITLE", "PICTURE", "MEDIATYPE"]<br><br>	&gt; t.raw.size<br>        =&gt; 206561<br><br>	&gt; t['PICTURE'].raw.size<br>	=&gt; 206419<br><br>	&gt; t.raw.size - t['PICTURE'].raw.size<br>	=&gt; 142<br><br><br>	<b># PLEASE NOTE: this is how you can delete huge pictures which are sometimes attached to your audio-files!</b><br><br>	&gt; t.delete('PICTURE')<br>	<i>output omitted (returns the picture as a raw string, so you could save it)</i><br><br>	&gt; t.keys<br>	=&gt; ["ARTIST", "SONGLEN", "CONTENTTYPE", "ALBUM", "TRACKNUM", "TITLE", "MEDIATYPE"]<br><br>	&gt; t<br>	=&gt; {"ARTIST"=&gt;{"encoding"=&gt;0, "text"=&gt;"Beatles"}, "SONGLEN"=&gt;{"encoding"=&gt;0, "text"=&gt;"258847"}, "CONTENTTYPE"=&gt;{"encoding"=&gt;0, "text"=&gt;"60's"}, "ALBUM"=&gt;{"encoding"=&gt;0, "text"=&gt;"Abbey Road"}, "TRACKNUM"=&gt;{"encoding"=&gt;0, "text"=&gt;"1"}, "TITLE"=&gt;{"encoding"=&gt;0, "text"=&gt;"Come Together"}, "MEDIATYPE"=&gt;{"encoding"=&gt;0, "text"=&gt;"DIG"}}<br><br>	# the padding size is a bit larger, that's why we don't get 142, but 170 bytes<br><br>	&gt; t.dump.size<br>	=&gt; 170<br><br><br>	<b># PLEASE NOTE that the entries are now a complex datastructure (according to the definition of ID3-Frames)</b><br><br>	&gt; t['ARTIST']<br>	=&gt; {"encoding"=&gt;0, "text"=&gt;"Beatles"}<br><br>	&gt; t['ARTIST']['text'] = "The Beatles"<br>	=&gt; "The Beatles"<br><br>	<b># PLEASE NOTE that you can not "invent" new Frame or field names:</b><br><br>	&gt; t['ARTIST']['myrating'] = 4<br>	ArgumentError: You can not add new keys! The ID3-frame TPE1 has fixed entries!<br>                       valid key are: encoding,text<br><br>        from ./id3.rb:562:in `[]='<br>        from (irb):7<br><br>	&gt; t['MYFIELD'] = "does not work!"<br>	ArgumentError: Incorrect ID3-field "MYFIELD" for ID3 version 2.3.0<br>                       valid fields are: PICTURE,FILEOWNER,CONDUCTOR,EVENTTIMING,DATE,CRYPTOREG,COMMENT,POPULARIMETER,GROUPINGREG,PUBLISHER,COPYRIGHT,EQUALIZATION,NETRADIOSTATION,ORIGFILENAME,WWWPUBLISHER,BUFFERSIZE,PLAYCOUNTER,ISRC,LYRICIST,RECORDINGDATES,SIZE,INVOLVEDPEOPLE,POSITIONSYNC,WWWCOMMERCIALINFO,PLAYLISTDELAY,ORIGLYRICIST,ALBUM,SYNCEDLYRICS,CONTENTTYPE,SONGLEN,MEDIATYPE,WWWPAYMENT,REVERB,COMPOSER,LINKEDINFO,CONTENTGROUP,BPM,ORIGYEAR,ORIGARTIST,UNIQUEFILEID,USERTEXT,FILETYPE,TIME,PRIVATE,SUBTITLE,TERMSOFUSE,BAND,WWWCOPYRIGHT,YEAR,INITIALKEY,SYNCEDTEMPO,PARTINSET,WWWUSER,AUDIOCRYPTO,MPEGLOOKUP,VOLUMEADJ,ORIGALBUM,CDID,ENCODEDBY,WWWAUDIOFILE,COMMERCIAL,TITLE,MIXARTIST,NETRADIOOWNER,TRACKNUM,WWWAUDIOSOURCE,GENERALOBJECT,WWWRADIOPAGE,LANGUAGE,ENCODERSETTINGS,WWWARTIST,ARTIST,UNSYNCEDLYRICS<br><br>        from ./id3.rb:636:in `[]='<br>        from (irb):8<br><br>	<b>#  PLEASE NOTE that the raw tag is read only, and reflects the data that was read from the file!<br></b><br>	&gt; t.raw<br>	<i>output omitted (returns a string with the raw ID3-v2-tag)<br></i>	<br>	&gt; t.raw.hexdump<br>	<i>output omitted (returns a hexdump of the raw ID3-v2-tag)</i><br>	<br>	&gt; t.raw.size<br>	=&gt; 206561<br><br>	&gt; t.dump<br>	=&gt; "ID3\003\000\000\000\000\001 TPE1\000\000\000\t\000\000\000Beatles\000TLEN\000\000\000\010\000\000\000258847\000TCON\000\000\000\006\000\000\00060's\000TALB\000\000\000\f\000\000\000Abbey Road\000TRCK\000\000\000\003\000\000\0001\000TIT2\000\000\000\017\000\000\000Come Together\000TMED\000\000\000\005\000\000\000DIG\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"<br>i<br><br>	&gt; t.dump.hexdump<br><br>	 index       0 1 2 3  4 5 6 7  8 9 A B  C D E F<br><br>	00000000    49443303 00000000 01205450 45310000    ID3...... TPE1..<br>	00000010    00090000 00426561 746c6573 00544c45    .....Beatles.TLE<br>	00000020    4e000000 08000000 32353838 34370054    N.......258847.T<br>	00000030    434f4e00 00000600 00003630 27730054    CON.......60's.T<br>	00000040    414c4200 00000c00 00004162 62657920    ALB.......Abbey<br>	00000050    526f6164 00545243 4b000000 03000000    Road.TRCK.......<br>	00000060    31005449 54320000 000f0000 00436f6d    1.TIT2.......Com<br>	00000070    6520546f 67657468 65720054 4d454400    e Together.TMED.<br>	00000080    00000500 00004449 47000000 00000000    ......DIG.......<br>	00000090    00000000 00000000 00000000 00000000    ................<br>	000000a0    00000000 00000000 0000                 ..........<br>	=&gt; nil<br><br>	&gt; t.dump.size<br>	=&gt; 170<br><br>	<br><br>	<br>	<br><br></pre>
+
+
+
+
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; <br>
+
+
+
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  <br>
+
+
+
+
+
+<br>
+
+
+
+
+
+</body></html>

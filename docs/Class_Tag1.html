@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+  
+  
+  
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+  <title>Class ID3::Tag1</title>
+
+  </head>
+<body><br>
+
+
+
+
+<br>
+
+
+
+
+<br>
+
+
+
+
+<h3>class ID3::Tag1</h3>
+
+
+This class models version 1.x ID3-tags, and is mostly for backwards
+compatibility.&nbsp;&nbsp; It's recommended to use version 2.x
+ID3-tags, because they don't truncate the values, and give more
+flexibility.<br>
+
+
+
+<br>
+
+
+
+<h4>
+Provided Functionality:
+</h4>
+
+
+
+<ul>
+
+
+
+
+  <li>Reads and parses audio files for ID3-tags</li>
+  <li>Writes audio files and attaches ID3-tags to them&nbsp;&nbsp;&nbsp; # not yet implemented<br>
+</li>
+
+
+  <li>Low-level interface to ID3-tags</li>
+</ul>
+
+
+
+<h4>Instance Variables:</h4>
+
+
+
+<ul>
+
+
+
+  
+  
+  <li>version&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # either nil, or a string wtih the version number</li><li>raw&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+# string containing the raw ID3 version 1 tag<br>
+  </li>
+
+</ul>
+
+
+
+
+
+<h4>Instance Methods:</h4>
+
+
+<ul>
+
+
+  <li>new</li>
+  <li>read<br>
+</li>
+  <li>write&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # not yet implemented..</li>
+  <li>dump<br>
+  </li>
+
+</ul>
+
+
+<br>
+
+
+
+
+<h4>Hash-like Access:</h4>
+
+
+When accessing a Tag1 object wtih the Hash syntax, you can access the
+actual data in the tag. Please note that there is only a very limited
+number of valid keys, and that the class does not allow "inventing" new
+keys (as those would not be defined in the ID3 definition)<br>
+
+
+<br>
+
+
+<h4>Examples:</h4>
+
+
+<pre>	&gt; require 'id3'<br>	=&gt; true<br><br>	&gt; t = ID3::Tag1.new<br>	=&gt; {}<br><br>	&gt; t.read('mp3/d.mp3')<br>	=&gt; true<br><br>	&gt; t.version<br>	=&gt; "1.1"<br><br>	&gt; t<br>	=&gt; {"ARTIST"=&gt;"Beatles, The", "ALBUM"=&gt;"Abbey Road", "TRACKNUM"=&gt;"1", "TITLE"=&gt;"Come Together", "YEAR"=&gt;"2002", "GENREID"=&gt;"12", "COMMENT"=&gt;"Provided by Vlet"}<br><br>	&gt; &gt; t['ALBUM']<br>	=&gt; "Abbey Road"<br><br>	&gt; t['ARTIST']<br>	=&gt; "Beatles, The"<br><br>	&gt; t['ARTIST'] = "The Beatles"<br>	=&gt; "The Beatles"<br><br>	<b>#  PLEASE NOTE that the raw tag is read only, and reflects the data that was read from the file!</b><br>	<br>	&gt; t.raw<br>	=&gt; "TAGCome Together\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000Beatles, The\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000Abbey Road\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\0002002Provided by Vlet\000\000\000\000\000\000\000\000\000\000\000\000\000\001\f"<br><br>	&gt; t.raw.hexdump<br><br>	 index       0 1 2 3  4 5 6 7  8 9 A B  C D E F<br><br>	00000000    54414743 6f6d6520 546f6765 74686572    TAGCome Together<br>	00000010    00000000 00000000 00000000 00000000    ................<br>	00000020    00426561 746c6573 2c205468 65000000    .Beatles, The...<br>	00000030    00000000 00000000 00000000 00000041    ...............A<br>	00000040    62626579 20526f61 64000000 00000000    bbey Road.......<br>	00000050    00000000 00000000 00000000 00323030    .............200<br>	00000060    3250726f 76696465 64206279 20566c65    2Provided by Vle<br>	00000070    74000000 00000000 00000000 0000010c    t...............<br>	=&gt; nil<br><br><b>	#  PLEASE NOTE that the the dump method dumps a new raw tag into a string, and reflects <br>	#              the current data of the Tag1 object (with the changes you might have made)<br><br>	</b>&gt; t.dump<br>	=&gt; "TAGCome Together\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000The Beatles\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000Abbey Road\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\0002002Provided by Vlet\000\000\000\000\000\000\000\000\000\000\000\000\000\001\f"<br><br>	&gt; t.dump.hexdump<br><br>	 index       0 1 2 3  4 5 6 7  8 9 A B  C D E F<br><br>	00000000    54414743 6f6d6520 546f6765 74686572    TAGCome Together<br>	00000010    00000000 00000000 00000000 00000000    ................<br>	00000020    00546865 20426561 746c6573 00000000    .The Beatles....<br>	00000030    00000000 00000000 00000000 00000041    ...............A<br>	00000040    62626579 20526f61 64000000 00000000    bbey Road.......<br>	00000050    00000000 00000000 00000000 00323030    .............200<br>	00000060    3250726f 76696465 64206279 20566c65    2Provided by Vle<br>	00000070    74000000 00000000 00000000 0000010c    t...............<br>	=&gt; nil<br><br>	<br><b>	# PLEASE NOTE that you can not just "make up" new field names<br><br></b>	&gt; t['something']<br>	=&gt; nil<br><br>	&gt; t['something'] = 'is not allowed!!'<br>	ArgumentError: Incorrect ID3-field "something" for ID3 version 1.1<br>	               valid fields are: ARTIST,ALBUM,TRACKNUM,TITLE,YEAR,GENREID,COMMENT<br><br>        from ./id3.rb:636:in `[]='<br>        from (irb):25<br>        from :0<br><br></pre>
+
+
+
+
+</body></html>

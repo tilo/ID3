@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+  
+  
+  
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+  <title>Class ID3::Frame</title>
+
+  </head>
+<body><br>
+
+
+
+
+<br>
+
+
+
+
+<br>
+
+
+
+
+<h3>class ID3::Frame</h3>
+
+This class models ID3-Frames independent of
+the D3-version, e.g. 2.2.0, 2.3.0, 2.4.0&nbsp;&nbsp;&nbsp; This module
+tries to hide all the ugly details about the Frame-internals and how to
+parse each Frame-type for each ID3-version.<br>
+
+
+<br>
+
+
+The user doesn't need to use any of the methods provided by this
+module, but s/he can access the Instance Variables to examine each
+Frame.<br>
+
+
+<br>
+
+
+Each Frame is organized as a "ordered Hash" , to preserve the order of it's fields, as they are defined by the ID3-standard<br>
+
+<br>
+
+Because the names of the ID3-Frames vary between the ID3-versions, we are using a <a href="ID3_comparison.html">symbolic name to reference the Frame</a>, not it's real (short) name.<br>
+
+
+
+<h4>
+Provided Functionality:
+</h4>
+
+
+
+<ul>
+
+
+
+
+  <li>Reads and parses a frame upon initialization<br>
+</li>
+  <li>Dumps a frame raw into a string</li><li>Low-level interface to ID3-Frames</li>
+  <li>Not all Frame-types are fully parsed, but can be accessed/copied/dumped as raw<br>
+  </li>
+</ul>
+
+
+
+<h4>Instance Variables:</h4>
+
+
+<ul>
+
+
+  <li>name</li>
+  <li>version</li>
+  <li>raw<br>
+  </li>
+  <li>rawdata</li>
+  <li>rawheader</li>
+  <li>rawflags&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # if version is larger than 2.2.x</li>
+  <li>flags&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+# Hash with the parsed flags, if version &gt; 2.2.x<br>
+  </li>
+  <li>headerStartX</li>
+  <li>dataStartX</li>
+</ul>
+
+
+<br>
+
+
+ 
+
+<h4>Instance Methods:</h4>
+
+
+<ul>
+
+
+  <li>initialize&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+# does all the hard work.. parses the Frame, defines parse/dump-methods<br>
+</li><li>parse&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+# defined during run-time, depending on the particular Frame-Type<br>
+  </li>
+  <li>dump&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+# defined during run-time, depending on the particular Frame-Type<br>
+  </li>
+</ul>
+
+<br>
+
+
+<h4>Examples:</h4>
+
+
+<pre>	&gt; require 'id3'<br>	=&gt; true<br><br>	# here we're just creating an ID3::Tag2 object and read-in an mp3-file<br><br>	&gt; t = ID3::Tag2.new<br>	=&gt; {}<br>	&gt; t.read("mp3/b.mp3")<br>	=&gt; true<br>	&gt; t.version<br>	=&gt; "2.2.0"<br>	&gt; t.keys<br>	=&gt; ["ARTIST", "SONGLEN", "CONTENTTYPE", "ALBUM", "ENCODEDBY", "TRACKNUM", "TITLE", "YEAR", "PICTURE", "MEDIATYPE", "COMMENT"]<br><br>	# NOW let's look at the internals of a Frame:<br><br>	&gt; t['ARTIST']<br>	=&gt; {"encoding"=&gt;0, "text"=&gt;"Juno reactor"}<br><br>	&gt; t['ARTIST'].keys<br>	=&gt; ["encoding", "text"]<br><br>	&gt; t['ARTIST'].order<br>	=&gt; ["encoding", "text"]<br><br>	# PLEASE NOTE that the author does not have expertise with other than western character encodings..<br>	#             I'd like to hear some input how this can be implemented better..  and if/how Ruby can detect<br>	#             the character encoding of a string which was provided by the user<br><br>	&gt; t['ARTIST']['text'] = "Juno Reactor"<br>	=&gt; "Juno Reactor"<br><br>	&gt; t['ARTIST'].raw<br>	=&gt; "TP1\000\000\016\000Juno reactor\000"<br><br>	&gt; t['ARTIST'].rawheader<br>	=&gt; "TP1\000\000\016"<br><br>	&gt; t['ARTIST'].rawdata<br>	=&gt; "\000Juno reactor\000"<br><br>	# a lot of the really useful Frame types are text frames..<br><br>	&gt; t['CONTENTTYPE']<br>	=&gt; {"encoding"=&gt;0, "text"=&gt;"Electronica/Dance"}<br><br>	&gt; t['YEAR']<br>	=&gt; {"encoding"=&gt;0, "text"=&gt;"1997"}<br><br>	&gt; t['SONGLEN']<br>	=&gt; {"encoding"=&gt;0, "text"=&gt;"258847"}<br><br><br></pre>
+
+
+
+
+</body></html>

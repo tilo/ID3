@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+  
+  
+  
+  
+  
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+  <title>Module ID3</title>
+
+  </head>
+<body><br>
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+<h3>Module ID3</h3>
+
+
+This module models provides methods, constants and classes to handle
+ID3 version 1.x and version 2.x tags for audio files.
+<P>
+
+
+
+
+
+
+<br>
+
+
+
+
+
+<h4>
+Provided Functionality:
+</h4>
+
+
+
+
+
+<ul>
+
+
+
+
+
+
+  <li>Reads and parses audio files for ID3-tags</li>
+  <li>Writes audio files and attaches ID3-tags to them&nbsp;&nbsp;&nbsp; # not yet implemented<br>
+</li>
+
+
+  <li>Provides both high-level and low-level classes for handling files with ID3-tags<br>
+</li>
+</ul>
+
+
+
+
+
+<h4><br>
+</h4>
+<h4>Module Constants:</h4>
+
+<ul>
+
+<li>
+ID3::SUPPORTED_SYMBOLS[version]</li>
+</ul>
+
+
+<h4>Module Methods:</h4>
+
+<ul>
+
+  <li>ID3.hasID3v1tag?(filename)</li>
+  <li>ID3.hasID3v2tag?(filename)</li>
+  <li>ID3.hasID3tag?(filename)</li>
+  <li>ID3.removeID3v1tag(filename)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+# ID3v1 tags aren't really very useful - that's why there is a special
+method to remove them<br>
+  </li>
+</ul>
+
+
+
+
+<h4>Classes:</h4>
+
+
+
+
+
+
+<ul>
+
+
+
+
+
+  
+  
+  <li><a href="Class_AudioFile.html">ID3::AudioFile</a><br>
+</li><li><a href="Class_Tag1.html">ID3::Tag1</a></li><li><a href="Class_Tag2.html">ID3::Tag2</a></li>
+  <li><a href="Class_Frame.html">ID3::Frame</a><br>
+  </li>
+
+
+</ul>
+
+<br>
+
+
+
+
+<h4>Examples:</h4>
+
+
+
+
+<pre>	&gt; require 'id3'<br>	=&gt; true<br><br>	&gt; ID3.hasID3tag?("mp3/a.mp3")<br>	=&gt; "1.0 2.3.0"<br><br>	&gt; ID3.hasID3tag?("mp3/b.mp3")<br>	=&gt; "2.2.0"<br><br>	&gt; ID3.hasID3tag?("mp3/c.mp3")<br>	=&gt; "1.1"<br><br>	&gt; ID3.hasID3tag?("mp3/d.mp3")<br>	=&gt; "1.1 2.3.0"<br><br>	&gt; `cp mp3/d.mp3 mp3/delete.mp3`<br>	=&gt; true<br><br>	&gt;  ID3.hasID3tag?("mp3/delete.mp3")<br>	=&gt; "1.1 2.3.0"<br>	&gt;  ID3.removeID3v1tag("mp3/delete.mp3")<br>	=&gt; true<br>	&gt;   ID3.hasID3tag?("mp3/delete.mp3")<br>	=&gt; "2.3.0"<br><br>	&gt; version = ID3.hasID3v2tag?("mp3/b.mp3")<br>	=&gt; "2.3.0"<br><br>	&gt; ID3::SUPPORTED_SYMBOLS[version].keys<br>	=&gt; ["PICTURE", "FILEOWNER", "CONDUCTOR", "EVENTTIMING", "DATE", "CRYPTOREG", "COMMENT", "POPULARIMETER", "GROUPINGREG", "PUBLISHER", "COPYRIGHT", "EQUALIZATION", "NETRADIOSTATION", "ORIGFILENAME", "WWWPUBLISHER", "BUFFERSIZE", "PLAYCOUNTER", "ISRC", "LYRICIST", "RECORDINGDATES", "SIZE", "INVOLVEDPEOPLE", "POSITIONSYNC", "WWWCOMMERCIALINFO", "PLAYLISTDELAY", "ORIGLYRICIST", "ALBUM", "SYNCEDLYRICS", "CONTENTTYPE", "SONGLEN", "MEDIATYPE", "WWWPAYMENT", "REVERB", "COMPOSER", "LINKEDINFO", "CONTENTGROUP", "BPM", "ORIGYEAR", "ORIGARTIST", "UNIQUEFILEID", "USERTEXT", "FILETYPE", "TIME", "PRIVATE", "SUBTITLE", "TERMSOFUSE", "BAND", "WWWCOPYRIGHT", "YEAR", "INITIALKEY", "SYNCEDTEMPO", "PARTINSET", "WWWUSER", "AUDIOCRYPTO", "MPEGLOOKUP", "VOLUMEADJ", "ORIGALBUM", "CDID", "ENCODEDBY", "WWWAUDIOFILE", "COMMERCIAL", "TITLE", "MIXARTIST", "NETRADIOOWNER", "TRACKNUM", "WWWAUDIOSOURCE", "GENERALOBJECT", "WWWRADIOPAGE", "LANGUAGE", "ENCODERSETTINGS", "WWWARTIST", "ARTIST", "UNSYNCEDLYRICS"]<br><br><br><br></pre>
+
+
+
+
+
+
+</body></html>
