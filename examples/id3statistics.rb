@@ -100,7 +100,7 @@ end
 
 dir = ARGV[0]
 
-recursiveDirectoryDescend(dir, /.*\.mp3/i, %q{ eachSong(fullname) } )
+recursiveDirectoryDescend(dir, /.*\.[mM][pP]3/, %q{ eachSong(fullname) } )
 
 
 print "
@@ -112,13 +112,13 @@ MP3 Files found  : #{@@mp3fileN}
 "
 
 @@id3versionN.keys.each { |v|
-  printf"\nnumber of ID3 tags v#{v} : #{@@id3versionN[v]}\n"
+  printf "\nnumber of ID3 tags v#{v} : #{@@id3versionN[v]}\n"
 }
 
 puts "\n"
 
 @@tagsPerFileN.each_index{ |x|
-  printf"\nFiles tagged #{x}-times : #{@@tagsPerFileN[x]}\n"
+  printf "\nFiles tagged #{x}-times : #{@@tagsPerFileN[x]}\n"
 }
 
 ID3::SUPPORTED_SYMBOLS.keys.sort.each{ |v|
@@ -126,7 +126,7 @@ ID3::SUPPORTED_SYMBOLS.keys.sort.each{ |v|
   puts "\nFIELDS USED IN VERSION #{v}\n"
 
   @@fieldsUsedN[v].keys.each { |field|
-     printf"\t%20s : %d\n", field, @@fieldsUsedN[v][field]
+     printf "\t%20s : %d\n", field, @@fieldsUsedN[v][field]
   }
 
 }
