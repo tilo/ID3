@@ -512,7 +512,7 @@ class ID3tag < Hash
   def parse_frame_header(x)
      framename = ""; flags = nil
      hsize = size = 0
-     if @version =~ "^2.2."
+     if @version =~ /^2\.2\./
         hsize = 6;                     # 2.2.x Header Size is 6 bytes
         header = @raw[x..x+hsize-1]
 
