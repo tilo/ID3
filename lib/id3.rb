@@ -27,7 +27,7 @@
 #         IN NO EVENT WILL THE COPYRIGHT HOLDERS  BE LIABLE TO YOU FOR DAMAGES, INCLUDING ANY GENERAL, 
 #         SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE USE OR INABILITY 
 #         TO USE THE PROGRAM (INCLUDING BUT NOT LIMITED TO LOSS OF DATA OR DATA BEING RENDERED 
-#         INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD PARTIES OR A FAILURE OF THE PROGRAM 
+#         INACCURATE OR USELESS OR LOSSES SUSTAINED BY YOU OR THIRD PARTIES OR A FAILURE OF THE PROGRAM 
 #         TO OPERATE WITH ANY OTHER PROGRAMS), EVEN IF THE COPYRIGHT HOLDERS OR OTHER PARTY HAS BEEN
 #         ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
 #
@@ -148,18 +148,26 @@ module ID3
   # ----------------------------------------------------------------------------
   #    CONSTANTS
   # ----------------------------------------------------------------------------
-  @@RCSid = '$Id: id3.rb,v 1.1 2002/10/28 03:02:10 tilo Exp tilo $'
+  @@RCSid = '$Id: id3.rb,v 1.2 2004/11/29 05:18:44 tilo Exp tilo $'
 
   ID3v1tagSize = 128;    # ID3v1 and ID3v1.1 have fixed size tags at end of file
   ID3v2headerSize = 10;
 
-  # Struct for storing internal information about ID3v2 frames, and how to handle them
+  # NOTE:
   #
+  # the following SHOULD NOT BE a struct, but rather a full class.. with it's own
+  # singleton methods which know how to construct/parse specific frames
+  #  
+  # Struct for storing internal information about ID3v2 frames, and how to handle them
+
+  
+    #
   ID3frame = Struct.new("ID3frame", :name, :headerStartX,  :dataStartX, :dataEndX, :flags)
   ID3frameHandler = Struct.new("ID3frameHandler", :name, :unpack, :pack)
   
   # different versions of ID3 tags, support different fields.
   # See: http://www.unixgods.org/~tilo/ID3v2_frames_comparison.txt
+  # See: http://www.unixgods.org/~tilo/ID3/docs/ID3_comparison.html
 
   
   SUPPORTED_SYMBOLS = {
@@ -174,8 +182,13 @@ module ID3
     #
     # NOTE: values for hash need to be different for ID3v2.x!!
     #       What i really want to do is to create the following entries dynamically 
-    #       at startup - so we can have Structs for each entry, which contain the name
+    #       at startup - so we can have Classes for each entry, which contain the name
     #       of the field-TAG as well as pointers to the pack() and unpack() functions
+    #
+    #  Each instance of ID3tag should then only have/show the tags which are defined
+    #  for that particular ID3-version of that tag..
+    #
+    #
     
     "2.2.0" => {"CONTENTGROUP"=>"TT1", "TITLE"=>"TT2", "SUBTITLE"=>"TT3",
                 "ARTIST"=>"TP1", "BAND"=>"TP2", "CONDUCTOR"=>"TP3", "MIXARTIST"=>"TP4",
@@ -558,6 +571,11 @@ class ID3tag < Hash
        len,frame = parse_frame_header(i)
        if len != 0
           i += len
+          #
+          # instead of unpack_TXT, I should define a singleton method unpack, 
+          # just for the use in this particular frame (whatever kind it is)
+          # and not worry about the type after the unpack method is defined.
+          #
           self[ @@framename2symbol[@version][frame.name] ] = unpack_TXT(frame)
        else
           # finished parsing
