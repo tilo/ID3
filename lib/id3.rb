@@ -2,10 +2,10 @@
 # id3.rb  Ruby Module for handling the following ID3-tag versions:
 #         ID3v1.0 , ID3v1.1,  ID3v2.2.0, ID3v2.3.0, ID3v2.4.0
 # 
-# Copyright (C) 2002,2003,2004 by Tilo Sloboda <tilo@unixgods.org> 
+# Copyright (C) 2002 .. 2005 by Tilo Sloboda <tilo@unixgods.org> 
 #
 # created:      12 Oct 2002
-# updated:      Time-stamp: <Mon 27-Dec-2004 22:23:49 Tilo Sloboda>
+# updated:      Time-stamp: <Sun 02-Jan-2005 10:47:12 Tilo Sloboda>
 #
 # Docs:   http://www.id3.org/id3v2-00.txt
 #         http://www.id3.org/id3v2.3.0.txt
@@ -14,8 +14,8 @@
 #         http://www.id3.org/id3v2.4.0-frames.txt
 #  
 #         different versions of ID3 tags, support different fields.
-#         See: http://www.unixgods.org/~tilo/ID3v2_frames_comparison.txt
-#         See: http://www.unixgods.org/~tilo/ID3/docs/ID3_comparison.html
+#         See: http://www.unixgods.org/~tilo/Ruby/ID3/ID3v2_frames_comparison.txt
+#         See: http://www.unixgods.org/~tilo/Ruby/ID3/docs/ID3_comparison.html
 #
 # License:     
 #         Freely available under the terms of the OpenSource "Artistic License"
@@ -35,6 +35,7 @@
 #         INACCURATE OR USELESS OR LOSSES SUSTAINED BY YOU OR THIRD PARTIES OR A FAILURE OF THE PROGRAM 
 #         TO OPERATE WITH ANY OTHER PROGRAMS), EVEN IF THE COPYRIGHT HOLDERS OR OTHER PARTY HAS BEEN
 #         ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+#
 #
 # Author's Rant:
 #         The author of this ID3-library for Ruby is not responsible in any way for 
@@ -65,7 +66,7 @@
 #       removeID3v1tag(filename)
 #
 #    Classes:
-#       File
+#       AudioFile
 #       Tag1
 #       Tag2
 #       Frame
@@ -73,12 +74,17 @@
 ################################################################################
 
 # ==============================================================================
-# Lading other stuff..
+# Loading other stuff..
 # ==============================================================================
 
-require "md5"
+require 'md5'
+require 'tempfile'
+require 'ftools'
+
+# my extensions:
 
 require 'hexdump'                  # load hexdump method to extend class String
+
 require 'invert_hash'              # new invert method for old Hash
 
 
@@ -90,6 +96,7 @@ class Hash                         # overwrite Hash.invert method
     end
 end
 
+# ==============================================================================
 
 module ID3
 
@@ -279,7 +286,7 @@ module ID3
                                 #  not sure if it's   Z* or  A*
                                 #  A*  does not append a \0 when writing!
                                 
-    # STILL NEED TO CAREFULLY VERIFY THESE AGAINST THE STANDARDS AND GET TEST-CASES!
+    # STILL NEED TO GET MORE TEST-CASES! e.g. Japanese ID3-Tags! or other encodings..
     # seems like i have no version 2.4.x ID3-tags!! If you have some, send them my way!
 
     FRAME_PARSER = {
@@ -337,9 +344,8 @@ module ID3
     # MODULE FUNCTIONS:
     # ----------------------------------------------------------------------------
     # The ID3 module functions are to query or modify files directly.
-    # They give direct acess to files, and don't parse the tags, despite their headers
-    #
-    #
+    # They check directly if a file has a ID3-tag, but they don't parse the tags!
+
     
     # ----------------------------------------------------------------------------
     # hasID3v1tag? 
@@ -413,7 +419,8 @@ module ID3
       stat = File.stat(filename)
       if stat.file? && stat.writable? && ID3.hasID3v1tag?(filename)
          
-         # CAREFUL: this does not check if there really is a valid tag:
+         # CAREFUL: this does not check if there really is a valid tag,
+         #          that's why we need to check above!!
          
          newsize = stat.size - ID3v1tagSize
          File.open(filename, "r+") { |f| f.truncate(newsize) }
@@ -434,8 +441,8 @@ module ID3
     #    revert feature would be nice to have..
     # 
     #    If we query and AudioFile object, we query what's currently associated with it
-    #    e.g. we're not querying the file itself, but the perhaps modified tags
-    #    To query the file itself, use the module functions
+    #    e.g. we're not querying the file itself, but the Tag object which is perhaps modified.
+    #    To query the file itself, use the ID3 module functions
 
     class AudioFile
 
@@ -446,12 +453,11 @@ module ID3
       attr_reader :dirname,      :basename      # absolute dirname and basename of the file (computed)
 
       attr_accessor :tagID3v1, :tagID3v2
-      attr_reader   :hasID3tag                  # either false, or a string with all version numbers found
 
       # ----------------------------------------------------------------------------
       # initialize
       #
-      #   AudioFile.new   does NOT open the file, but scans it and parses the info
+      #   AudioFile.new   does NOT keep the file open, but scans it and parses the info
 
       #   e.g.:  ID3::AudioFile.new('mp3/a.mp3')
 
@@ -465,7 +471,7 @@ module ID3
           @tagID3v2     = nil
           
           audioStartX   = 0
-          audioEndX     = File.size(filename)
+          audioEndX     = File.size(filename) - 1  # points to the last index
 
           if ID3.hasID3v1tag?(@filename)
               @tagID3v1 = Tag1.new
@@ -481,14 +487,101 @@ module ID3
           end
           
           # audioStartX audioEndX indices into the file need to be set
-          @audioStartX = audioStartX 
-          @audioEndX   = audioEndX
+          @audioStartX = audioStartX     # first byte of audio data
+          @audioEndX   = audioEndX       # last byte of audio data
           
           # user may compute the MD5sum of the audio content later..
           # but we're only doing this if the user requests it..
+          # because MD5sum computation takes a little bit time.
 
           @audioMD5sum = nil
       end
+      
+      # ----------------------------------------------------------------------------
+      def audioLength
+         @audioEndX - @audioStartX + 1
+      end
+      # ----------------------------------------------------------------------------
+      # write
+      #     write the AudioFile to file, including any ID3-tags
+      #     We keep backups if we write to a specific filename
+      
+      def write(*filename)
+          backups = false
+          
+          if filename.size == 0     # this is an Array!!
+             filename = @filename
+             backups  = true        # keep backups if we write to a specific filename
+          else
+             filename = filename[0]
+             backups = false
+          end
+      
+          tf = Tempfile.new( @basename )
+          tmpname = tf.path
+          
+          # write ID3v2 tag:
+          
+          if @tagID3v2
+             tf.write( @tagID3v2.dump )
+          end
+          
+          # write Audio Data:
+          
+          File.open( @filename ) { |f|
+             f.seek(@audioStartX)
+             tf.write( f.read(@audioEndX - @audioStartX +1) )
+          }
+          
+          # write ID3v1 tag:
+          
+          if @tagID3v1
+             tf.write( @tagID3v1.dump )
+          end
+          
+          tf.close
+          
+          # now some logic about moving the tempfile and replacing the original
+
+          bakname = filename + '.bak'
+          File.move(filename, bakname) if backups && FileTest.exists?(filename) && ! FileTest.exists?(bakname)
+
+          File.move(tmpname, filename)
+          tf.close(true)
+          
+          # write md5sum file:
+          
+          writeMD5sum if @audioMD5sum
+
+      end
+      
+      # ----------------------------------------------------------------------------
+      # writeAudio
+      #     only for debugging, does not write any ID3-tags, but just the audio portion
+      
+      def writeAudio
+         tf = Tempfile.new( @basename )
+         
+         File.open( @filename ) { |f|
+            f.seek(@audioStartX)
+            tf.write( f.read(@audioEndX - @audioStartX + 1) )
+         }
+         tf.close
+         path = tf.path
+         
+         tf.open
+         tf.close(true)
+      end
+      
+      
+      # ----------------------------------------------------------------------------
+      # NOTE on md5sum's:
+      #    If you don't know what an md5sum is, you can think of it as a unique 
+      #    fingerprint of a file or some data.  I added the md5sum computation to
+      #    help users keep track of their converted songs - even if the ID3-tag of
+      #    a file changes, the md5sum of the audio data does not change..
+      #    The md5sum can help you ensure that the audio-portion of the file
+      #    was not changed after modifying, adding or deleting ID3-tags.
       
       # ----------------------------------------------------------------------------
       # audioMD5sum
@@ -556,6 +649,11 @@ module ID3
          
       end
       # ----------------------------------------------------------------------------
+      # version    aka    versions
+      #     queries the tag objects and returns the version numbers of those tags
+      #     NOTE: this does not reflect what's currently in the file, but what's
+      #           currently in the AudioFile object
+      
       def version
          a = Array.new
          a.push(@tagID3v1.version) if @tagID3v1
@@ -573,6 +671,8 @@ module ID3
     
     # ==============================================================================
     # Class RestrictedOrderedHash
+    #    this is a helper Class for ID3::Frame
+    #
     
     class RestrictedOrderedHash < Hash
 
@@ -649,15 +749,20 @@ module ID3
     # ==============================================================================
     # Class GenericTag
     #
-    # as per ID3-definition, the frames are in no fixed order! that's why Hash is OK
+    # Helper class for Tag1 and Tag2
+    #
+    # Checks that user uses a valid key, and adds methods for size computation
+    #
+    # as per ID3-definition, the frames are in no fixed order! that's why we can derive
+    # this class from Hash.  But in the future we may want to write certain frames first 
+    # into the ID3-tag and therefore may want to derive it from RestrictedOrderedHash
 
-    class GenericTag < Hash        ###### should this be RestrictedOrderedHash as well? 
+    class GenericTag < Hash
        attr_reader :version, :raw
 
        # these definitions are to prevent users from inventing their own field names..
        # but on the other hand, they should be able to create a new valid field, if
        # it's not yet in the current tag, but it's valid for that ID3-version...
-       # ... so hiding this, is not enough!
        
        alias old_set []=
        private :old_set
@@ -719,12 +824,6 @@ module ID3
        # ----------------------------------------------------------------------
        # read     reads a version 1.x ID3tag
        #
-       #     30 title
-       #     30 artist
-       #     30 album
-       #      4 year
-       #     30 comment
-       #      1 genre
 
        def read(filename)
          f = File.open(filename, 'r')
@@ -734,7 +833,7 @@ module ID3
            f.seek(-ID3::ID3v1tagSize, IO::SEEK_END)
            @raw = f.read(ID3::ID3v1tagSize)
 
-#           self.parse!(raw)    # we should use "parse!" instead of re-coding everything..
+#           self.parse!(raw)    # we should use "parse!" instead of duplicating code!
 
            if (raw[ID3v1versionbyte] == 0) 
               @version = "1.1"
@@ -769,6 +868,7 @@ module ID3
        #
        # always upgrade version 1.0 to 1.1 when writing
  
+       # not yet implemented, because AudioFile.write does the job better
        
        # ----------------------------------------------------------------------
        # this routine modifies self, e.g. the Tag1 object
@@ -805,7 +905,7 @@ module ID3
        #
        # although we provide this method, it's stongly discouraged to use it, 
        # because ID3 version 1.x tags are inferior to version 2.x tags, as entries
-       # are often truncated and hence often useless..
+       # are often truncated and hence ID3 v1 tags are often useless..
        
        def dump
          zeroes = "\0" * 32
@@ -909,14 +1009,28 @@ module ID3
       # writes and replaces existing ID3-v2-tag if one is present
       # Careful, this does NOT merge or append, it overwrites!
       
-      def write(filename)
+      # not yet implemented, because AudioFile.write does the job better
+      
+#      def write(filename)
          # check how long the old ID3-v2 tag is
          
          # dump ID3-v2-tag
          
          # append old audio to new tag
          
-      end
+#      end
+      
+      # ----------------------------------------------------------------------------
+      # writeID3v2
+      #    just writes the ID3v2 tag by itself into a file, no audio data is written
+      #
+      #    for backing up ID3v2 tags and debugging only..
+      #
+      
+#      def writeID3v2
+      
+#      end
+      
       # ----------------------------------------------------------------------
       # parse_frame_header
       #
@@ -983,6 +1097,12 @@ module ID3
       end
       # ----------------------------------------------------------------------
       # dump a ID3-v2 tag into a binary array
+      #
+      # NOTE:
+      #      when "dumping" an ID3-v2 tag, I would like to have more control about
+      #      which frames get dumped first.. e.g. the most important frames (with the
+      #      most important information) should be dumped first.. 
+      #
       
       public      
       def dump
@@ -992,7 +1112,7 @@ module ID3
         self.each { |framename,framedata|
            data << framedata.dump
         }
-        # add some padding perhaps
+        # add some padding perhaps 32 bytes (should be defined by the user!)
         data << "\0" * 32
         
         # calculate the complete length of the data-section 
@@ -1015,37 +1135,6 @@ module ID3
     #      parses ID3v2 frames from a binary array
     #      dumps  ID3v2 frames into a binary array
     #      allows to modify frame's contents if the frame was decoded..
-    #
-    # NOTE:   right now the class Frame is derived from Hash, which is wrong..
-    #         It should really be derived from something like RestrictedOrderedHash
-    #         ... a new class, which preserves the order of keys, and which does 
-    #         strict checking that all keys are present and reference correct values!
-    #         e.g.   frames["COMMENT"]
-    #         ==>  {"encoding"=>Byte, "language"=>Chars3, "text1"=>String, "text2"=>String}
-    #
-    #         e.g.  user should be able to create a new frame , like: 
-    #              tag2.frames["COMMENT"] = "right side"
-    #
-    #         and the following checks should be done:
-    #
-    #            1) if "COMMENT" is a correct key for tag2
-    #            2) if the "right side" contains the correct keys
-    #            3) if the "right side" contains the correct value for each key
-    #
-    #         In the simplest case, the "right side" might be just a string, 
-    #         but for most FrameTypes, it's a complex datastructure.. and we need
-    #         to check it for correctness before doing the assignment..
-    #
-    # NOTE2:  the class Tag2 should have hash-like accessor functions to let the user
-    #         easily access frames and their contents..
-    #
-    #         e.g.  tag2[framename] would really access tag2.frames[framename]
-    #
-    #         and if that works, we can make tag2.frames private and hidden!
-    #
-    #         This means, that when we generate the parse and dump routines dynamically, 
-    #         we may want to create the corresponding accessor methods for Tag2 class 
-    #         as well...? or are generic ones enough?
     #
 
     class Frame < RestrictedOrderedHash
