@@ -380,7 +380,12 @@ class ID3tag < Hash
      i = frame.dataStartX
      j = frame.dataEndX
      if @raw[i] == 0
-       return @raw[i+1..j].squeeze(" \000").chomp(" ").chomp("\000")
+       if s = @raw[i+1..j]
+          return @raw[i+1..j].squeeze(" \000").chomp(" ").chomp("\000")
+     else 
+	 print "\n\nproblem in #{frame.name}\n"
+	 return ""
+       end
      else 
        return "__UNKNOWN_CODING__"
      end
