@@ -1,0 +1,60 @@
+                       ===========================
+                        Overview of ID3v2 Frames:
+                       ===========================
+
+
+This document contains a comparison over the frames used in the 3 different 
+versions of the informal ID3v2 standard: v2.2.0, v2.3.0 and v2.4.0
+
+This document is a compilation of information which is available in the 
+documents listed below, and therefore does not have a Copyright by itself.
+The original documents Copyright notices apply.
+
+Content: Copyright (C) Martin Nilsson 1998, 2000
+
+Please refer to the original documents listed below, for any information 
+regarding the ID3v2 standards.
+
+
+
+Compiled by: Tilo Sloboda, Thu, 17 Oct 2002 00:26:54 -0700
+
+
+Sources:
+    ID3v2 2.0:     http://www.id3.org/id3v2-00.txt
+    ID3v2 3.0:     http://www.id3.org/id3v2.3.0.txt
+    ID3v2 4.0:     http://www.id3.org/id3v2.4.0-changes.txt
+                   http://www.id3.org/id3v2.4.0-structure.txt
+                   http://www.id3.org/id3v2.4.0-frames.txt
+
+
+================================================================================
+ID3V22_HEADER:          "ID3" $02 $00 $C0 $7F $7F $7F $7F
+                
+ID3V22_FRAME_HEADER:    "XXX" $SS $SS $SS
+
+ID3V22_TEXT_FRAME1:      $01 <textstring> ($00 (00))
+
+ID3V22_TEXT_FRAME2:      <textstring> ($00 (00)) 
+
+ID3V22_TEXT_FRAME3:      $01 <textstring> ($00 (00))
+                             <textstring> ($00 (00))
+
+ID3V22_BINARY_FRAME1:    <binary data>
+
+
+================================================================================
+ID3V23_HEADER:          "ID3" $03 $00 $C0 $7F $7F $7F $7F
+
+ID3V23_FRAME_HEADER:    "XXXX" $SS $SS $SS $SS $FF $FF
+
+
+================================================================================
+ID3V24_HEADER:          "ID3" $04 $00 $F0 $7F $7F $7F $7F
+
+ID3V24_FRAME_HEADER:    "XXXX" $7F $7F $7F $7F $FF $FF
+
+
+================================================================================
+
+                
