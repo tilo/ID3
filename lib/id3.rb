@@ -148,15 +148,13 @@ module ID3
   # ----------------------------------------------------------------------------
   #    CONSTANTS
   # ----------------------------------------------------------------------------
-  @@RCSid = '$Id: id3.rb,v 1.1 2002/10/28 03:02:10 tilo Exp tilo $'
+  @@RCSid = '$Id: id3.rb,v 1.1 2002/10/28 03:02:10 tilo Exp $'
 
   ID3v1tagSize = 128;    # ID3v1 and ID3v1.1 have fixed size tags at end of file
   ID3v2headerSize = 10;
 
-  # Struct for storing internal information about ID3v2 frames, and how to handle them
-  #
   ID3frame = Struct.new("ID3frame", :name, :headerStartX,  :dataStartX, :dataEndX, :flags)
-  ID3frameHandler = Struct.new("ID3frameHandler", :name, :unpack, :pack)
+
   
   # different versions of ID3 tags, support different fields.
   # See: http://www.unixgods.org/~tilo/ID3v2_frames_comparison.txt
@@ -173,10 +171,7 @@ module ID3
 
     #
     # NOTE: values for hash need to be different for ID3v2.x!!
-    #       What i really want to do is to create the following entries dynamically 
-    #       at startup - so we can have Structs for each entry, which contain the name
-    #       of the field-TAG as well as pointers to the pack() and unpack() functions
-    
+    #
     "2.2.0" => {"CONTENTGROUP"=>"TT1", "TITLE"=>"TT2", "SUBTITLE"=>"TT3",
                 "ARTIST"=>"TP1", "BAND"=>"TP2", "CONDUCTOR"=>"TP3", "MIXARTIST"=>"TP4",
                 "COMPOSER"=>"TCM", "LYRICIST"=>"TXT", "LANGUAGE"=>"TLA", "CONTENTTYPE"=>"TCO",
@@ -190,7 +185,7 @@ module ID3
                 "USERTEXT"=>"TXX", 
                 "WWWAUDIOFILE"=>"WAF", "WWWARTIST"=>"WAR", "WWWAUDIOSOURCE"=>"WAS",
                 "WWWCOMMERCIALINFO"=>"WCM", "WWWCOPYRIGHT"=>"WCP", "WWWPUBLISHER"=>"WPB",
-                "WWWUSER"=>"WXX", "UNIQUEFILEID"=>"UFI",
+                "WWWUSER"=>"WXX",
                 "INVOLVEDPEOPLE"=>"IPL", "UNSYNCEDLYRICS"=>"ULT", "COMMENT"=>"COM",
                 "CDID"=>"MCI", "EVENTTIMING"=>"ETC", "MPEGLOOKUP"=>"MLL",
                 "SYNCEDTEMPO"=>"STC", "SYNCEDLYRICS"=>"SLT", "VOLUMEADJ"=>"RVA",
@@ -214,7 +209,7 @@ module ID3
                 "NETRADIOOWNER"=>"TRSO", "USERTEXT"=>"TXXX",
                 "WWWAUDIOFILE"=>"WOAF", "WWWARTIST"=>"WOAR", "WWWAUDIOSOURCE"=>"WOAS",
                 "WWWCOMMERCIALINFO"=>"WCOM", "WWWCOPYRIGHT"=>"WCOP", "WWWPUBLISHER"=>"WPUB",
-                "WWWRADIOPAGE"=>"WORS", "WWWPAYMENT"=>"WPAY", "WWWUSER"=>"WXXX", "UNIQUEFILEID"=>"UFID",
+                "WWWRADIOPAGE"=>"WORS", "WWWPAYMENT"=>"WPAY", 
                 "INVOLVEDPEOPLE"=>"IPLS", 
                 "UNSYNCEDLYRICS"=>"USLT", "COMMENT"=>"COMM", "TERMSOFUSE"=>"USER",
                 "CDID"=>"MCDI", "EVENTTIMING"=>"ETCO", "MPEGLOOKUP"=>"MLLT",
@@ -243,7 +238,7 @@ module ID3
                 "ALBUMSORTORDER"=>"TSOA", "PERFORMERSORTORDER"=>"TSOP", "TITLESORTORDER"=>"TSOT",
                 "WWWAUDIOFILE"=>"WOAF", "WWWARTIST"=>"WOAR", "WWWAUDIOSOURCE"=>"WOAS",
                 "WWWCOMMERCIALINFO"=>"WCOM", "WWWCOPYRIGHT"=>"WCOP", "WWWPUBLISHER"=>"WPUB",
-                "WWWRADIOPAGE"=>"WORS", "WWWPAYMENT"=>"WPAY", "WWWUSER"=>"WXXX", "UNIQUEFILEID"=>"UFID",
+                "WWWRADIOPAGE"=>"WORS", "WWWPAYMENT"=>"WPAY", 
                 "MUSICIANCREDITLIST"=>"TMCL", "INVOLVEDPEOPLE2"=>"TIPL",
                 "UNSYNCEDLYRICS"=>"USLT", "COMMENT"=>"COMM", "TERMSOFUSE"=>"USER",
                 "CDID"=>"MCDI", "EVENTTIMING"=>"ETCO", "MPEGLOOKUP"=>"MLLT",
@@ -260,9 +255,8 @@ module ID3
   }
   
   # ----------------------------------------------------------------------------
-  #  MODULE FUNCTIONS
+  #    METHODS
   # ----------------------------------------------------------------------------
-  module_function
 
   # check if file has a ID3-tag and which version it is
   # 
@@ -272,7 +266,7 @@ module ID3
   # has_v1_tag? 
   #              returns true if v1.0 or v1.1 tag was found 
 
-  def has_v1_tag?(filename)
+  def ID3::has_v1_tag?(filename)
     hastag     = 0
     
     f = File.open(filename, 'r')
@@ -294,7 +288,7 @@ module ID3
   # has_v2_tag? 
   #              returns true if a tag version 2.2.0, 2.3.0 or 2.4.0 was found 
   
-  def has_v2_tag?(filename)
+  def ID3::has_v2_tag?(filename)
     hastag     = 0
     
     f = File.open(filename, 'r')
@@ -316,20 +310,13 @@ class ID3tag < Hash
   # ----------------------------------------------------------------------------
   #    VARIABLES
   # ----------------------------------------------------------------------------
-  @@framename2symbol= Hash.new
-  @@framename2symbol["1.0"] = ID3::SUPPORTED_SYMBOLS["1.0"].invert
-  @@framename2symbol["1.1"] = ID3::SUPPORTED_SYMBOLS["1.1"].invert
-  @@framename2symbol["2.2.0"] = ID3::SUPPORTED_SYMBOLS["2.2.0"].invert
-  @@framename2symbol["2.3.0"] = ID3::SUPPORTED_SYMBOLS["2.3.0"].invert
-  @@framename2symbol["2.4.0"] = ID3::SUPPORTED_SYMBOLS["2.4.0"].invert
-        
 
   # ----------------------------------------------------------------------------
   #    PRIVATE METHODS   (need to hide those!)
   # ----------------------------------------------------------------------------
-  private
-  
+
   def initialize
+ 
       @version = ""
       @raw     = "";    # the raw ID3 tag
   end
@@ -373,23 +360,10 @@ class ID3tag < Hash
 
     return bytes
   end
-  # ----------------------------------------------------------------------
-  #    UNPACKING and PACKING METHODS
-  # ----------------------------------------------------------------------------
-  def unpack_TXT (frame)
-     i = frame.dataStartX
-     j = frame.dataEndX
-     if @raw[i] == 0
-       return @raw[i+1..j].squeeze(" \000").chomp(" ").chomp("\000")
-     else 
-       return "__UNKNOWN_CODING__"
-     end
-  end
 
   # ----------------------------------------------------------------------------
   #    PUBLIC METHODS
   # ----------------------------------------------------------------------------
-  public
 
   def raw
       @raw
@@ -399,26 +373,16 @@ class ID3tag < Hash
       @version
   end
 
-  def frames
-      @frames
-  end
-
   alias old_set []=
-  private :old_set
-  
 
   def []=(key,val)
-   if @version == ""
-     raise ArgumentError, "undefined version of ID3-tag! - set version before accessing components!\n" 
-   else
-     if ID3::SUPPORTED_SYMBOLS[@version].keys.include?(key)
+     if  SUPPORTED_SYMBOLS[@version].keys.include?(key)
         old_set(key,val)
      else 
         # exception
         raise ArgumentError, "Incorrect ID3-field \"#{key}\" for ID3 version #{@version}\n" +
                              "\t\tvalid fields are: " + SUPPORTED_SYMBOLS[@version].keys.join(",") +"\n"
      end
-   end
   end
 
   # keys, values, each, etc. come for free with Hash
@@ -490,7 +454,7 @@ class ID3tag < Hash
   #          total header size= dataStartX - headerX
   #          total data size  = dataEndX - dataStartX
   #
-  private  
+  
   def parse_frame_header(x)
      framename = ""; flags = nil
      hsize = size = 0
@@ -514,21 +478,16 @@ class ID3tag < Hash
      # if this is a valid frame of known type, we return it's total length and a struct
      # 
      if ID3::SUPPORTED_SYMBOLS[@version].has_value?(framename)
-         if !defined? @frames
-            @frames = Hash.new ; # dynamically extending this ID3tag instance..
-         end
          frame = ID3::ID3frame.new(framename, x, x+hsize , x+hsize + size - 1 , flags)
-         @frames[ @@framename2symbol[@version][frame.name] ] = frame
          return size+hsize , frame
      else
          return 0, nil
      end
   end
-
-  public  
+  
   # ----------------------------------------------------------------------
   # read_v2     reads a version 2.x ID3tag
-
+  
   def read_v2(filename)
     f = File.open(filename, 'r')
     hastag = (f.read(3) == "ID3")
@@ -547,13 +506,15 @@ class ID3tag < Hash
     #
     # now parse all the frames
     #
+    framename2symbol = ID3::SUPPORTED_SYMBOLS[@version].invert
+        
     i = ID3v2headerSize; # we start parsing right after the ID3v2 header
     
     while (i < @raw.size) && (@raw[i] != 0)
        len,frame = parse_frame_header(i)
        if len != 0
           i += len
-          self[ @@framename2symbol[@version][frame.name] ] = unpack_TXT(frame)
+          self[ framename2symbol[frame.name] ] = frame
        else
           # finished parsing
           break
