@@ -1,60 +1,197 @@
+
                        ===========================
-                        Overview of ID3v2 Frames:
+                       Comparison of ID3v2 Frames:
                        ===========================
 
-
-This document contains a comparison over the frames used in the 3 different 
-versions of the informal ID3v2 standard: v2.2.0, v2.3.0 and v2.4.0
+This document contains a side-by-side comparison over the frames used 
+in the 3 different versions of the informal ID3v2 standard: 
+v2.2.0, v2.3.0 and v2.4.0
 
 This document is a compilation of information which is available in the 
-documents listed below, and therefore does not have a Copyright by itself.
-The original documents Copyright notices apply.
+documents listed below. The original documents Copyright notices apply.
 
-Content: Copyright (C) Martin Nilsson 1998, 2000
-
-Please refer to the original documents listed below, for any information 
-regarding the ID3v2 standards.
+    ID3 v1.0 :     http://www.id3.org/id3v1.html
+    ID3 v1.1 :     http://www.egr.uri.edu/~kovacsp/mp3/ID3-Tag.html
 
 
-
-Compiled by: Tilo Sloboda, Thu, 17 Oct 2002 00:26:54 -0700
-
-
-Sources:
     ID3v2 2.0:     http://www.id3.org/id3v2-00.txt
     ID3v2 3.0:     http://www.id3.org/id3v2.3.0.txt
     ID3v2 4.0:     http://www.id3.org/id3v2.4.0-changes.txt
                    http://www.id3.org/id3v2.4.0-structure.txt
                    http://www.id3.org/id3v2.4.0-frames.txt
 
+Please refer to the original documents listed above, for any information 
+regarding the ID3v2 standards.
+
+
+Author:            Tilo Sloboda, Thu, 17 Oct 2002 00:26:54 -0700
+
+
+References:
+    id3lib-3.8.0   id3lib-3.8.0/include/id3/globals.h
+    
+    NOTE:          the symbolic names used in the leftmost column are derived
+                   from the names used in id3lib-3.8.0
+                   The symbolic name CRYPTEDMETA is not part of id3lib-3.8.0
+                   
+Legend:
+
+  -- : depreciated frame
+ 
+  -> : replaced by  (all frames listed before this one are replaced)
+  
+
 
 ================================================================================
-ID3V22_HEADER:          "ID3" $02 $00 $C0 $7F $7F $7F $7F
+                           ID3v2 version
+symbolic names          2.0     3.0     4.0     comments
+================================================================================
+
+CONTENTGROUP            TT1     TIT1    TIT1    content group description
+TITLE                   TT2     TIT2    TIT2    title/songname/content description
+SUBTITLE                TT3     TIT3    TIT3    subtitle/description refinement
+                        
+LEADARTIST              TP1     TPE1    TPE1    lead performer(s)/soloist(s)
+BAND                    TP2     TPE2    TPE2    band/orchestra/accompaniment
+CONDUCTOR               TP3     TPE3    TPE3    conductor/performer refinement
+MIXARTIST               TP4     TPE4    TPE4    interpreted, remixed, modified by
+                        
+COMPOSER                TCM     TCOM    TCOM    composer
+LYRICIST                TXT`    TEXT    TEXT    lyricist/text writer
+                        
+LANGUAGE                TLA     TLAN    TLAN    language(s)
+CONTENTTYPE             TCO     TCON    TCON    content type
+                        
+ALBUM                   TAL     TALB    TALB    album/movie/show title
+                        
+TRACKNUM                TRK     TRCK    TRCK    track number/position in set
+PARTINSET               TPA     TPOS    TPOS    part of set
+        
+ISRC                    TRC     TSRC    TSRC    international standard recording code
                 
-ID3V22_FRAME_HEADER:    "XXX" $SS $SS $SS
-
-ID3V22_TEXT_FRAME1:      $01 <textstring> ($00 (00))
-
-ID3V22_TEXT_FRAME2:      <textstring> ($00 (00)) 
-
-ID3V22_TEXT_FRAME3:      $01 <textstring> ($00 (00))
-                             <textstring> ($00 (00))
-
-ID3V22_BINARY_FRAME1:    <binary data>
-
-
+--------------------------------------------------------------------------------
+DATE                    TDA     TDAT            date
+YEAR                    TYE     TYER            year
+TIME                    TIM     TIME            time
+RECORDINGDATES          TRD     TRDA            recording dates
+RECORDINGTIME                        -> TDRC    recording time
+--------------------------------------------------------------------------------
+ORIGYEAR                TOR     TORY            original release year
+ORIGRELEASETIME                      -> TDOR    original release time
+--------------------------------------------------------------------------------
+        
+BPM                     TBP     TBPM    TBPM    beats per minute
+                        
+MEDIATYPE               TMT     TMED    TMED    media type
+FILETYPE                TFT     TFLT    TFLT    file type
+COPYRIGHT               TCR     TCOP    TCOP    copyright message
+                        
+PUBLISHER               TPB     TPUB    TPUB    pblisher
+ENCODEDBY               TEN     TENC    TENC    encoded by
+ENCODERSETTINGS         TSS     TSSE    TSSE    software/hardware + settings for encoding
+                        
+SONGLEN                 TLE     TLEN    TLEN    length (ms)
+--------------------------------------------------------------------------------
+SIZE                    TSI     TSIZ     --     size (bytes)
+--------------------------------------------------------------------------------
+                        
+PLAYLISTDELAY           TDY     TDLY    TDLY    playlist delay
+INITIALKEY              TKE     TKEY    TKEY    initial key
+                        
+ORIGALBUM               TOT     TOAL    TOAL    original album/movie/show title
+ORIGFILENAME            TOF     TOFN    TOFN    original filename
+ORIGARTIST              TOA     TOPE    TOPE    original artist(s)/performer(s)
+ORIGLYRICIST            TOL     TOLY    TOLY    original lyricist(s)/text writer(s)
+        
+FILEOWNER                       TOWN    TOWN    file owner/licensee
+NETRADIOSTATION                 TRSN    TRSN    internet radio station name
+NETRADIOOWNER                   TRSO    TRSO    internet radio station owner
+                                
+SETSUBTITLE                             TSST    set subtitle
+MOOD                                    TMOO    mood
+PRODUCEDNOTICE                          TPRO    produced notice
+ENCODINGTIME                            TDEN    encoding time
+RELEASETIME                             TDRL    release time
+TAGGINGTIME                             TDTG    tagging time
+                                        
+ALBUMSORTORDER                          TSOA    album sort order
+PERFORMERSORTORDER                      TSOP    performer sort order
+TITLESORTORDER                          TSOT    title sort order
+                                        
+USERTEXT                TXX     TXXX    TXXX    user defined text information frame
+                        
+                        
+WWWAUDIOFILE            WAF     WOAF    WOAF    official audio file webpage
+WWWARTIST               WAR     WOAR    WOAR    official artist/performer webpage
+WWWAUDIOSOURCE          WAS     WOAS    WOAS    official audion source webpage
+WWWCOMMERCIALINFO       WCM     WCOM    WCOM    commercial information
+WWWCOPYRIGHT            WCP     WCOP    WCOP    copyright/legal information
+WWWPUBLISHER            WPB     WPUB    WPUB    publishers official webpage
+                        
+WWWRADIOPAGE                    WORS    WORS    official internet radio station homepage
+WWWPAYMENT                      WPAY    WPAY    payment
+                                
+WWWUSER                 WXX     WXXX    WXXX    user defined URL link frame
+                        
+--------------------------------------------------------------------------------
+INVOLVEDPEOPLE          IPL     IPLS            involved people list
+MUSICIANCREDITLIST                   -> TMCL    musician credits list
+INVOLVEDPEOPLE2                      -> TIPL    involved people list
+--------------------------------------------------------------------------------
+        
+UNSYNCEDLYRICS          ULT     USLT    USLT    unsynchronised lyrics/text transcription
+COMMENT                 COM     COMM    COMM    comments
+        
+TERMSOFUSE                      USER    USER    terms of use
+                        
+        
 ================================================================================
-ID3V23_HEADER:          "ID3" $03 $00 $C0 $7F $7F $7F $7F
-
-ID3V23_FRAME_HEADER:    "XXXX" $SS $SS $SS $SS $FF $FF
-
-
+                           ID3v2 version
+symbolic names          2.0     3.0     4.0     comments
 ================================================================================
-ID3V24_HEADER:          "ID3" $04 $00 $F0 $7F $7F $7F $7F
+               
+CDID                    MCI     MCDI    MCDI    music CD identifier
+EVENTTIMING             ETC     ETCO    ETCO    event timing codes
+MPEGLOOKUP              MLL     MLLT    MLLT    MPEG location lookup table
+        
+SYNCEDTEMPO             STC     SYTC    SYTC    synchronised tempo codes
+SYNCEDLYRICS            SLT     SYLT    SYLT    synchronised lyrics/text
 
-ID3V24_FRAME_HEADER:    "XXXX" $7F $7F $7F $7F $FF $FF
-
-
+--------------------------------------------------------------------------------
+VOLUMEADJ               RVA     RVAD            relative volume adjustment
+VOLUMEADJ2                           -> RVA2    relative volume adjustment (2)
+--------------------------------------------------------------------------------
+EQUALIZATION            EQU     EQUA            equalization
+EQUALIZATION2                        -> EQU2    equalization (2)
+--------------------------------------------------------------------------------
+        
+REVERB                  REV     RVRB    RVRB    reverb
+PICTURE                 PIC     APIC    APIC    attached picture
+GENERALOBJECT           GEO     GEOB    GEOB    general encapsulated object
+                        
+PLAYCOUNTER             CNT     PCNT    PCNT    play counter
+POPULARIMETER           POP     POPM    POPM    popularimeter
+        
+BUFFERSIZE              BUF     RBUF    RBUF    recommended buffer size
+                        
+CRYPTEDMETA             CRM                     encrypted meta frame
+AUDIOCRYPTO             CRA     AENC    AENC    audio encryption
+                                        
+LINKEDINFO              LNK     LINK    LINK    linked information
+                        
+POSITIONSYNC                    POSS    POSS    position synchronisation frame
+                                
+COMMERCIAL                      COMR    COMR    commercial frame
+CRYPTOREG                       ENCR    ENCR    encryption method registration
+GROUPINGREG                     GRID    GRID    group indentification registration
+PRIVATE                         PRIV    PRIV    private frame
+                                
+OWNERSHIP                               OWNE    ownership frame
+SIGNATURE                               SIGN    signature frame
+SEEKFRAME                               SEEK    seek frame
+AUDIOSEEKPOINT                          ASPI    audio seek point index
+        
 ================================================================================
-
-                
+                           ID3v2 version
+symbolic names          2.0     3.0     4.0     comments
+================================================================================
