@@ -86,88 +86,193 @@
 
 
 
+class String
+  # ----------------------------------------------------------------------
+  # prints out a good'ol hexdump of the data contained in the string
 
-=begin
-= Synopsis
+  def hexdump(verbose = 0)
+     selfsize = self.size
+     offset = 0
+    
+     chunks,rest = selfsize.divmod(16)
+     address = offset; i = 0 
+     print "\n address     0 1 2 3  4 5 6 7  8 9 A B  C D E F\n\n"
+     while i < chunks*16
+        str = self[i..i+15]
+        if str != "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
+          str.tr!("\000-\037\177-\377",'.')
+          printf( "%08x    %8s %8s %8s %8s    %s\n", 
+                address, self[i..i+3].unpack('H8'), self[i+4..i+7].unpack('H8'),
+                   self[i+8..i+11].unpack('H8'), self[i+12..i+15].unpack('H8'),
+		 str)
+	else
+          # we don't print lines with all zeroes
+          if (verbose == 1)
+             str.tr!("\000-\037\177-\377",'.')
+             printf( "%08x    %8s %8s %8s %8s    %s\n", 
+                address, self[i..i+3].unpack('H8'), self[i+4..i+7].unpack('H8'),
+                   self[i+8..i+11].unpack('H8'), self[i+12..i+15].unpack('H8'),
+		    str)
+	  end
+	end
+        i += 16; address += 16
+     end
+     j = i; k = 0
+     if (i < selfsize)
+	printf( "%08x    ", address)
+	while (i < selfsize)
+	     printf "%02x", self[i]
+	     i += 1; k += 1
+	     print  " " if ((i % 4) == 0)
+	end
+	for i in (k..15)
+	       print "  "
+	end
+	str = self[j..selfsize]
+	str.tr!("\000-\037\177-\377",'.')
+        printf ("     %s\n", str)
+     end
+  end
 
-Parse for an existing ID3-tag and return it's version number
+end
 
-    version = ID3tag.hastag?(filename)
-
-returns 0 if no ID3-tag was found, or the version number of the tag
-
-=end
 
 module ID3
 
   # check if file has a ID3-tag and which version it is
   # 
   # NOTE: file might be tagged twice! :(
-
+  
+  # ----------------------------------------------------------------------------
+  #    CONSTANTS
+  # ----------------------------------------------------------------------------
   ID3v1tagSize = 128;    # ID3v1 and ID3v1.1 have fixed size tags at end of file
+  ID3v2headerSize = 10;
 
-  def ID3::hastag?(filename)
-    @hastag     = 0
-    @id3version = ''
+  # different versions of ID3 tags, support different fields.
+  # See: http://www.unixgods.org/~tilo/ID3v2_frames_comparison.txt
+
+  SUPPORTED_SYMBOLS = {
+    "1.0"   => {"ARTIST"=>33..62 , "ALBUM"=>63..92 ,"TITLE"=>3..32,
+                "YEAR"=>93..96 , "COMMENT"=>97..126,"GENREID"=>127
+               }  ,
+    "1.1"   => {"ARTIST"=>33..62 , "ALBUM"=>63..92 ,"TITLE"=>3..32,
+                "YEAR"=>93..96 , "COMMENT"=>97..124,"TRACKNUM"=>126,
+                "GENREID"=>127
+               }  ,
+
+
+    "2.2.0" => {"CONTENTGROUP"=>"TT1", "TITLE"=>"TT2", "SUBTITLE"=>"TT3",
+                "ARTIST"=>"TP1", "BAND"=>"TP2", "CONDUCTOR"=>"TP3", "MIXARTIST"=>"TP4",
+                "COMPOSER"=>"TCM", "LYRICIST"=>"TXT", "LANGUAGE"=>"TLA", "CONTENTTYPE"=>"TCO",
+                "ALBUM"=>"TAL", "TRACKNUM"=>"TRK", "PARTINSET"=>"TPA", "ISRC"=>"TRC", 
+                "DATE"=>"TDA", "YEAR"=>"TYE", "TIME"=>"TIM", "RECORDINGDATES"=>"TRD",
+                "ORIGYEAR"=>"TOR", "BPM"=>"TBP", "MEDIATYPE"=>"TMT", "FILETYPE"=>"TFT", 
+                "COPYRIGHT"=>"TCR", "PUBLISHER"=>"TPB", "ENCODEDBY"=>"TEN", 
+                "ENCODERSETTINGS"=>"TSS", "SONGLEN"=>"TLE", "SIZE"=>"TSI",
+                "PLAYLISTDELAY"=>"TDY", "INITIALKEY"=>"TKE", "ORIGALBUM"=>"TOT",
+                "ORIGFILENAME"=>"TOF", "ORIGARTIST"=>"TOA", "ORIGLYRICIST"=>"TOL",
+                "USERTEXT"=>"TXX", 
+                "WWWAUDIOFILE"=>"WAF"
+                #
+                ### to be continued.. 
+               } ,
+    "2.3.0" => {},
+    "2.4.0" => {}
+  }
+  # ----------------------------------------------------------------------------
+  #    VARIABLES
+  # ----------------------------------------------------------------------------
+  
+  # ----------------------------------------------------------------------------
+  #    METHODS
+  # ----------------------------------------------------------------------------
+
+  # ----------------------------------------------------------------------------
+  # has_v1_tag? 
+  #              returns true if v1.0 or v1.1 tag was found 
+
+  def ID3::has_v1_tag?(filename)
+    hastag     = 0
     
-    File.open(filename, 'r') { |f|
-      f.seek(-ID3v1tagSize, IO::SEEK_END)
-      if (f.read(3) == "TAG")
-         @hastag += 1
-          ver = "1.0"
-         @id3version == "" ? @id3version = ver : @id3version += " " + ver
+    f = File.open(filename, 'r')
+    f.seek(-ID3v1tagSize, IO::SEEK_END)
+    if (f.read(3) == "TAG")
+      f.seek(-ID3v1tagSize + 124, IO::SEEK_END)
+      c = f.getc;                         # this is character 125 of the tag
+  #   print "char = #{c}\n"
+      if (c == 0) 
+         hastag = "1.1"
+      else
+         hastag = "1.0"
       end
-    }
+    end
+    f.close
+    return hastag
+  end
 
+  # ----------------------------------------------------------------------------
+  # has_v2_tag? 
+  #              returns true if a tag version 2.2.0, 2.3.0 or 2.4.0 was found 
+  
+  def ID3::has_v2_tag?(filename)
+    hastag     = 0
+    
     f = File.open(filename, 'r')
     if (f.read(3) == "ID3")
        major = f.getc
        minor = f.getc
        ver   = "2." + major.to_s + '.' + minor.to_s
-       @id3version == "" ? @id3version = ver : @id3version += " " + ver
-
-       @hastag += 1
+       hastag = ver
     end
     f.close
-    return @hastag
+    return hastag
   end
-
-  def version
-     @id3version
-  end
-
-## -- Class ID3v1tag -------------------------------------------------------------
-
-require "mp3tag"
-
-class ID3v1tag < Mp3Tag 
-        # Mp3Tag is by Lars Christensen <larsch@cs.auc.dk>
-        # we just alias his class..  i didn't want to re-implement it. 
-end
 
 
 ## -- Class ID3tag -------------------------------------------------------------
 
-class ID3tag
+class ID3tag < Hash
 
+  # ----------------------------------------------------------------------------
+  #    VARIABLES
+  # ----------------------------------------------------------------------------
+
+  alias old_set []=
+
+  def []=(key,val)
+     if  SUPPORTED_SYMBOLS[@version].keys.include?(key)
+        old_set(key,val)
+     else 
+        # exception
+        raise ArgumentError, "Incorrect ID3-field \"#{key}\" for ID3 version #{@version}\n" +
+                             "\t\tvalid fields are: " + SUPPORTED_SYMBOLS[@version].keys.join(",") +"\n"
+     end
+  end
+
+  # keys, values, each, etc. come for free with Hash
+
+  # ----------------------------------------------------------------------------
+  #    PRIVATE METHODS
+  # ----------------------------------------------------------------------------
 
   def initialize
  
-      @hastag = FALSE
-      @id3version = []
-
+      @version = ""
+      @raw     = "";    # the raw ID3 tag
   end
 
-
-## -------------------------------------------------------------------------------
-
-def readN(f, n)
-  x = 0
-  for i in 1..n
-    x +=  256**(n-i)*f.read(1)[0]
+  # ----------------------------------------------------------------------------
+  # readN 
+  #         read N bytes and interprets them as a base 256 number
+  #
+  def readNbytes(f, n)
+    x = 0
+    for i in 1..n
+      x +=  256**(n-i)*f.read(1)[0]
+    end
+    return x
   end
-  return x
-end
 
   # ----------------------------------------------------------------------
   # convert the 4 bytes found in the id3v2 header and return the size
@@ -196,58 +301,71 @@ end
 
     return bytes
   end
-  # ----------------------------------------------------------------------
-  #  data is a string containing the data  (NOT COMPLETELY FUNCTIONAL)
 
-  def hexdump(data, offset=0)
-     datasize = data.size
-    
-     chunks,rest = datasize.divmod(16)
-     address = offset; i = 0 
-     print "\n address     0 1 2 3  4 5 6 7  8 9 A B  C D E F\n\n"
-     while i < chunks*16
-        str = data[i..i+15]
-        if str != "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
-          str.tr!("\000-\037\177-\377",'.')
-          printf( "%08x    %8s %8s %8s %8s    %s\n", 
-                address, data[i..i+3].unpack('H8'), data[i+4..i+7].unpack('H8'),
-                   data[i+8..i+11].unpack('H8'), data[i+12..i+15].unpack('H8'),
-	       str)
-	end
-        i += 16; address += 16
-     end
-     j = i; k = 0
-     printf( "%08x    ", address)
-     while (i < datasize)
-          printf "%02x", data[i]
-          i += 1; k += 1
-          print  " " if ((i % 4) == 0)
-     end
-     for i in (k..15)
-            print "  "
-     end
-     str = data[j..datasize]
-     str.tr!("\000-\037\177-\377",'.')
-     printf ("     %s\n", str)
-  end
+  # ----------------------------------------------------------------------------
+  #    PUBLIC METHODS
+  # ----------------------------------------------------------------------------
+
 
   # ----------------------------------------------------------------------
+  # read_v1     reads a version 1.x ID3tag
+  #
+  #     30 title
+  #     30 artist
+  #     30 album
+  #      4 year
+  #     30 comment
+  #      1 genre
   
-  def read_tag(filename)
+  def read_v1(filename)
     f = File.open(filename, 'r')
-    @header = Array.new(10,0)
-    @header = f.read(10)
-    f.seek(0)
-    if (f.read(3) == "ID3")
-       major = f.getc
-       minor = f.getc
-       id3version = major.to_s + '.' + minor.to_s
-       flag = f.getc
-       @datasize = size = unmungeSize(f.read(4))
-       @data = Array.new(size,0)
-       @data = f.read(size) 
+    f.seek(-ID3::ID3v1tagSize, IO::SEEK_END)
+    hastag = (f.read(3) == 'TAG')
+    if hastag
+      f.seek(-ID3::ID3v1tagSize, IO::SEEK_END)
+      @raw = f.read(ID3::ID3v1tagSize)
+      if (raw[125] == 0) 
+         @version = "1.1"
+      else
+         @version = "1.0"
+      end
+    else
+      @raw = @version = ""
     end
     f.close
+    #
+    # now parse all the fields
+
+    ID3::SUPPORTED_SYMBOLS[@version].each{ |key,val|
+       if val.type == Range
+          @field[key] = @raw[val].squeeze(" \000").chomp(" ").chomp("\000")
+       elsif val.type == Fixnum
+          @field[key] = @raw[val].to_s
+       else 
+          printf "unknown key/val : #{key} / #{val}  ; val-type: %s\n", val.type
+       end       
+    }
+    hastag
+  end
+  # ----------------------------------------------------------------------
+  # read_v2     reads a version 2.x ID3tag
+  
+  def read_v2(filename)
+    f = File.open(filename, 'r')
+    hastag = (f.read(3) == "ID3")
+    if hastag
+      major = f.getc
+      minor = f.getc
+      @version = "2." + major.to_s + '.' + minor.to_s
+      flag = f.getc
+      size = ID3v2headerSize + unmungeSize(f.read(4))
+      f.seek(0)
+      @raw = f.read(size) 
+    else
+       @raw = @version = ""
+    end
+    f.close
+    hastag
   end
 
   # ----------------------------------------------------------------------
@@ -257,17 +375,15 @@ end
       @header
   end
 
-  def data
-      @data
+  def raw
+      @raw
   end
-  def datasize
-      @datasize
-  end
+
   def hastag
       @hastag
   end
-  def id3version
-      @id3version
+  def version
+      @version
   end
 
 end 
