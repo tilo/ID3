@@ -2,10 +2,16 @@
 # id3.rb  Ruby Module for handling the following ID3-tag versions:
 #         ID3v1.0 , ID3v1.1,  ID3v2.2.0, ID3v2.3.0, ID3v2.4.0
 # 
-# Copyright (C) 2002,2003,2004 by Tilo Sloboda <tilo@unixgods.org> 
+# Copyright (C) 2002..2008 by Tilo Sloboda <tilo@unixgods.org> 
 #
 # created:      12 Oct 2002
-# updated:      Time-stamp: <Mon 27-Dec-2004 22:23:49 Tilo Sloboda>
+# updated:      Time-stamp: <Sat 16-Aug-2008 11:20:33 Tilo Sloboda>
+#
+# Version:      0.4.1
+#
+# Changes:
+#         0.4.1   thanks to Sergey Udaltsov for the UTF-8 UTF-16 patch
+#                 and parser routines!
 #
 # Docs:   http://www.id3.org/id3v2-00.txt
 #         http://www.id3.org/id3v2.3.0.txt
@@ -77,6 +83,7 @@
 # ==============================================================================
 
 require "md5"
+require "iconv"
 
 require 'hexdump'                  # load hexdump method to extend class String
 require 'invert_hash'              # new invert method for old Hash
@@ -276,6 +283,90 @@ module ID3
     VARS    = 0
     PACKING = 1
 
+    BE16BOM = "\xFE\xFF"
+    LE16BOM = "\xFF\xFE"
+
+    def ID3.parse_string_rest(encoding, string)
+      case encoding 
+      when 0
+        # ISO8859-1
+        return Iconv.iconv("ISO8859-1", "UTF-8", string);
+      when 1
+        # utf-16
+        bom = string[0..1]
+        data = string[2..string.length-1]
+        srcenc = bom == LE16BOM ? "UTF-16LE" : bom == BE16BOM ? "UTF-16BE" : "??"
+        return Iconv.iconv("UTF-8", srcenc, data);
+      when 2
+        # utf-16BE
+        return
+          Iconv.iconv("UTF-16BE", "UTF-8", data);
+      when 3 
+        return string
+      else
+        raise 'Unknown encoding #{encoding}'
+      end
+    end
+
+    def ID3.parse_string_zeroend(encoding, string)
+      strend = encoding == 0 || encoding == 3 ? "\x00" : "\x00\x00";
+
+      endidx = string.index(strend)
+      if endidx.nil?
+        return parse_string_rest(encoding, string), string.length;
+      elsif endidx == 0
+        return "", strend.length;
+      else
+        return parse_string_rest(encoding, string[0..endidx-1]), endidx + strend.length;
+      end
+    end
+    
+    def ID3.parse_a(data)
+      return [data]
+    end
+
+    def ID3.parse_Z(data)
+      rest = parse_string_rest(data)
+      return first, rest
+    end
+    
+    def ID3.parse_CZ(data)
+      encoding = data[0]
+      rest = parse_string_rest(encoding, data[1..data.length-1])
+      return encoding, rest
+    end
+
+    def ID3.parse_CZZ(data)
+      encoding = data[0]
+      second,length = parse_string_zeroend(encoding, data[1..data.length-1])
+      rest = parse_string_rest(encoding, data[1 + length..data.length-1])
+      return encoding, second, rest
+    end
+
+    def ID3.parse_CZCZa(data)
+      encoding = data[0]
+      second,length = parse_string_zeroend(encoding, data[1..data.length-1])
+      third = data[length + 1]
+      fourth,nexpart2 = parse_string_zeroend(encoding, data[2 + length..data.length-1])
+      rest = data[2 + length + length2..data.length-1]
+      return encoding, second, third, fourth, rest
+    end
+
+    def ID3.parse_Ca3ZZ(data)
+      encoding = data[0]
+      second = data[1..3]
+      third,length = parse_string_zeroend(encoding,data[4..data.length-1])
+      rest = parse_string_rest(encoding, data[4 + length..data.length-1])
+      return encoding, second, third, rest
+    end
+    
+    PARSER_CZ = lambda { |data| parse_CZ(data) }
+    PARSER_CZZ = lambda { |data| parse_CZZ(data) }
+    PARSER_Z = lambda { |data| parse_Z(data) }
+    PARSER_a = lambda { |data| parse_a(data) }
+    PARSER_CZCZa = lambda { |data| parse_CZCZa(data) }
+    PARSER_Ca3ZZ = lambda { |data| parse_Ca3ZZ(data) }
+
                                 #  not sure if it's   Z* or  A*
                                 #  A*  does not append a \0 when writing!
                                 
@@ -283,21 +374,21 @@ module ID3
     # seems like i have no version 2.4.x ID3-tags!! If you have some, send them my way!
 
     FRAME_PARSER = {
-      "TEXT"      => [ %w(encoding text) , 'CZ*' ] ,
-      "USERTEXT"  => [ %w(encoding description value) , 'CZ*Z*' ] ,
+      "TEXT"      => [ %w(encoding text) , PARSER_CZ ] ,
+      "USERTEXT"  => [ %w(encoding description value) , PARSER_CZZ ] ,
 
-      "PICTURE"   => [ %w(encoding mimeType pictType description picture) , 'CZ*CZ*a*' ] ,
+      "PICTURE"   => [ %w(encoding mimeType pictType description picture) , PARSER_CZCZa ] ,
 
-      "WEB"       => [ "url" , 'Z*' ] ,
-      "WWWUSER"   => [ %w(encoding description url) , 'CZ*Z*' ] ,
+      "WEB"       => [ "url" , PARSER_Z ] ,
+      "WWWUSER"   => [ %w(encoding description url) , PARSER_CZZ ] ,
 
-      "LTEXT"     => [ %w(encoding language text) , 'CZ*Z*' ] ,
-      "UNSYNCEDLYRICS"    => [ %w(encoding language content text) , 'Ca3Z*Z*' ] ,
-      "COMMENT"   => [ %w(encoding language short long) , 'Ca3Z*Z*' ] ,
-      "BINARY"    => [ "binary" , 'a*' ] ,
-      "UNPARSED"  => [ "raw" , 'a*' ]       # how would we do value checking for this?
+      "LTEXT"     => [ %w(encoding language text) , PARSER_CZZ ] ,
+      "UNSYNCEDLYRICS"    => [ %w(encoding language content text) , PARSER_Ca3ZZ ] ,
+      "COMMENT"   => [ %w(encoding language short long) , PARSER_Ca3ZZ ] ,
+      "BINARY"    => [ "binary" , PARSER_a ] ,
+      "UNPARSED"  => [ "raw" , PARSER_a ]       # how would we do value checking for this?
     }
-    
+
     # ----------------------------------------------------------------------------
     # MODULE VARIABLES
     # ----------------------------------------------------------------------------
@@ -964,7 +1055,7 @@ module ID3
             framename = header[0..3]
             size = (header[4]*256**3)+(header[5]*256**2)+(header[6]*256)+header[7]
             flags= header[8..9]
-#            printf "frame: %s , size: %d, flags: %s\n", framename , size, flags
+#            printf "frame (at %x, frameheader %d): %s , size: %d, flags: %x %x\n", x, frameHeaderSize, framename , size, flags[0], flags[1]
 
          else
             # we can't parse higher versions
@@ -1090,7 +1181,11 @@ module ID3
                    end
                 EOB
                 
-                @rawflags = flags.to_i   # preserve the raw flags (for debugging only)
+                @rawflags = flags[0].to_i << 8 | flags[1]  # preserve the raw flags (for debugging only)
+
+                if (@rawflags & (FRAME_HEADER_FLAGS["2.4.0"]["Unsynchronisation"])) != 0
+                   @rawdata = @rawdata.gsub("\xFF\x00","\xFF")
+                end
 
                 if (flags.to_i & FRAME_HEADER_FLAG_MASK[@version] != 0)
                    # in this case we need to skip parsing the frame... and skip to the next one...
@@ -1128,7 +1223,7 @@ module ID3
                        vars2 = vars
                     end
 
-                    values = self.rawdata.unpack(packing)
+                    values = packing.call(self.rawdata)
                     vars.each { |key|
                        self[key] = values.shift
                     }

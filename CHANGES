@@ -1,0 +1,12 @@
+= id3 changes
+
+=== 0.4.1 (2008-08-16)
+
+* Included patch provided by Sergey Udaltsov for UTF-8 and UTF-16 encodings, and new parser routines
+
+=== 0.4.0 (2008-08-16)
+
+* Made previous version 0.4 available as a Ruby Gem , otherwise identical to 0.4
+
+
+
