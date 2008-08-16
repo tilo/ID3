@@ -13,6 +13,17 @@ RAA:        http://raa.ruby-lang.org/project/id3tag/
 RubyForge:  http://rubyforge.org/projects/id3/
 GitHub:     https://github.com/tilo/ID3
 
+MD5 Sums:
+
+400ccf29d29da1d203f38657a18fca3e  id3-0.4.0.gem
+0ce2f2e3a2e57aba92ce72ec300ffa76  id3-0.4.0.tar.gz
+
+
 NOTE: 
 
    Initial release was 12 Oct 2002
+
+   This is a beta release.. so, if you think there are some problems,
+   errors, inconsistencies, or there is something missing, please contact
+   the author - THANK YOU! :-)
+
