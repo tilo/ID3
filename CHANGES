@@ -1,0 +1,20 @@
+= id3 changes
+
+=== 0.5.0 (2008-08-18)
+
+* Added write support
+* Fixed bug in determining the audioEnd index
+* reverted UTF-16 fix because it broke the writing the tags
+  If you really need UTF-16 encoding, please stick with version 0.4.1 for now (read-only)
+
+
+=== 0.4.1 (2008-08-16)
+
+* Included patch provided by Sergey Udaltsov for UTF-8 and UTF-16 encodings, and new parser routines
+
+=== 0.4.0 (2008-08-16)
+
+* Made previous version 0.4 available as a Ruby Gem , otherwise identical to 0.4
+
+
+

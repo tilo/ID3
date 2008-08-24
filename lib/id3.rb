@@ -2,10 +2,10 @@
 # id3.rb  Ruby Module for handling the following ID3-tag versions:
 #         ID3v1.0 , ID3v1.1,  ID3v2.2.0, ID3v2.3.0, ID3v2.4.0
 # 
-# Copyright (C) 2002 .. 2005 by Tilo Sloboda <tilo@unixgods.org> 
+# Copyright (C) 2002 .. 2008 by Tilo Sloboda <tilo@unixgods.org> 
 #
 # created:      12 Oct 2002
-# updated:      Time-stamp: <Sun 02-Jan-2005 10:47:12 Tilo Sloboda>
+# updated:      Time-stamp: <Mon 18-Aug-2008 06:16:19 Tilo Sloboda>
 #
 # Docs:   http://www.id3.org/id3v2-00.txt
 #         http://www.id3.org/id3v2.3.0.txt
@@ -14,7 +14,7 @@
 #         http://www.id3.org/id3v2.4.0-frames.txt
 #  
 #         different versions of ID3 tags, support different fields.
-#         See: http://www.unixgods.org/~tilo/Ruby/ID3/ID3v2_frames_comparison.txt
+#         See: http://www.unixgods.org/~tilo/Ruby/ID3/docs/ID3v2_frames_comparison.txt
 #         See: http://www.unixgods.org/~tilo/Ruby/ID3/docs/ID3_comparison.html
 #
 # License:     
@@ -1113,6 +1113,7 @@ module ID3
            data << framedata.dump
         }
         # add some padding perhaps 32 bytes (should be defined by the user!)
+        # NOTE:    I noticed that iTunes adds excessive amounts of padding
         data << "\0" * 32
         
         # calculate the complete length of the data-section 
