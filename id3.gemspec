@@ -1,8 +1,8 @@
 spec = Gem::Specification.new do |s|
   s.name = 'id3'
-  s.version = '0.5.0'
+  s.version = '0.5.1'
   s.author = 'Tilo Sloboda'
-  s.email  = 'tools@unixgods.org'
+  s.email  = 'firstname.lastname@google.com"
   s.homepage = 'http://www.unixgods.org/~tilo/Ruby/ID3'
   s.platform = Gem::Platform::RUBY
   s.summary = 'A native ID3 tag library for Ruby, which does not depend on architecture-dependent C-libraries. It supports reading and writing ID3-tag versions 1.0, 1.1, and 2.2.x, 2,3.x, 2,4.x\n http://www.unixgods.org/~tilo/Ruby/ID3'
