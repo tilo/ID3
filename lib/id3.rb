@@ -5,7 +5,7 @@
 # Copyright (C) 2002 .. 2008 by Tilo Sloboda <tilo@unixgods.org> 
 #
 # created:      12 Oct 2002
-# updated:      Time-stamp: <Mon 18-Aug-2008 06:16:19 Tilo Sloboda>
+# updated:      Time-stamp: <Wed, 30 Mar 2011, 20:32:54 PDT  tilo>
 #
 # Docs:   http://www.id3.org/id3v2-00.txt
 #         http://www.id3.org/id3v2.3.0.txt
@@ -77,9 +77,24 @@
 # Loading other stuff..
 # ==============================================================================
 
-require 'md5'
+if RUBY_VERSION >= "1.9.0"
+  require "digest/md5"
+  require "digest/sha1"
+  include Digest
+
+  require 'fileutils'
+  include FileUtils::Verbose
+else
+  require "md5"
+  require "sha1"
+
+  require 'ftools'
+  def move(a,b)
+    File.move(a,b)
+  end
+end
+
 require 'tempfile'
-require 'ftools'
 
 # my extensions:
 
@@ -544,9 +559,9 @@ module ID3
           # now some logic about moving the tempfile and replacing the original
 
           bakname = filename + '.bak'
-          File.move(filename, bakname) if backups && FileTest.exists?(filename) && ! FileTest.exists?(bakname)
+          move(filename, bakname) if backups && FileTest.exists?(filename) && ! FileTest.exists?(bakname)
 
-          File.move(tmpname, filename)
+          move(tmpname, filename)
           tf.close(true)
           
           # write md5sum file:
