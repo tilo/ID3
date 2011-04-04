@@ -16,3 +16,9 @@ GitHub:     https://github.com/tilo/ID3
 NOTE: 
 
    Initial release was 12 Oct 2002
+
+NOTE: 
+
+   With the major changes in Ruby 1.9's IO class, the low-level IO has gotten much harder to accomplish.
+   With the Ruby 1.9 IO class all reads return strings, and no longer the integers representing the bytes.
+   I'm working on a re-write.. ping me if you want to help
