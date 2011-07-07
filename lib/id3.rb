@@ -77,22 +77,12 @@
 # Loading other stuff..
 # ==============================================================================
 
-if RUBY_VERSION >= "1.9.0"
-  require "digest/md5"
-  require "digest/sha1"
-  include Digest
+require "digest/md5"
+require "digest/sha1"
+include Digest
 
-  require 'fileutils'
-  include FileUtils::Verbose
-else
-  require "md5"
-  require "sha1"
-
-  require 'ftools'
-  def move(a,b)
-    File.move(a,b)
-  end
-end
+require 'fileutils'
+include FileUtils::Verbose
 
 require 'tempfile'
 
