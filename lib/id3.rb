@@ -1301,8 +1301,11 @@ module ID3
         end
       EOB
       self.parse           # now we're using the just defined parsing routine
-      if self["encoding"] == 1
-        self["text"] = Iconv.conv('UTF-8', 'UTF-16', self["text"])
+      
+      if RUBY_VERSION >= "1.9.0"
+        if self["encoding"] == 1
+          self["text"] = Iconv.conv('UTF-8', 'UTF-16', self["text"])
+        end
       end
       self
     end
