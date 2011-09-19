@@ -1195,6 +1195,52 @@ module ID3
     attr_reader :name, :version
     attr_reader :headerStartX, :dataStartX, :dataEndX, :rawdata, :rawheader  # debugging only
 
+
+    def self.parse(aFrame)
+      # here we GENERATE the code to parse, dump and verify  methods
+             
+      vars,packing = ID3::FRAME_PARSER[ ID3::FrameName2FrameType[ ID3::Framename2symbol[aFrame.version][aFrame.name]] ]
+
+      # debugging print-out:
+
+      if vars.class == Array
+        vars2 = vars.join(",") 
+      else
+        vars2 = vars
+      end
+
+      values = aFrame.rawdata.unpack(packing)
+      vars.each { |key|
+        aFrame[key] = values.shift
+      }
+      aFrame.lock   # lock the OrderedHash
+    end
+
+    def self.dump(aFrame)
+      vars,packing = ID3::FRAME_PARSER[ ID3::FrameName2FrameType[ ID3::Framename2symbol[aFrame.version][aFrame.name]] ]
+                
+      data = aFrame.values.pack(packing)     # we depend on an OrderedHash, so the values are in the correct order!!!
+      header  = aFrame.name.dup         # we want the value! not the reference!!
+      len     = data.length
+      if aFrame.version =~ /^2\.2\./
+        byte2,rest = len.divmod(256**2)
+        byte1,byte0 = rest.divmod(256)
+
+        header << byte2 << byte1 << byte0
+
+      elsif aFrame.version =~ /^2\.[34]\./          # 10-byte header
+        byte3,rest = len.divmod(256**3)
+        byte2,rest = rest.divmod(256**2)
+        byte1,byte0 = rest.divmod(256)            
+
+        flags1,flags0 = aFrame.rawflags.divmod(256)
+                   
+        header << byte3 << byte2 << byte1 << byte0 << flags1 << flags0
+      end
+      header << data
+    end
+
+
     # ----------------------------------------------------------------------
     # return the complete raw frame
       
@@ -1249,58 +1295,9 @@ module ID3
         else
           raise ArgumentError, "ID3 version #{@version} not recognized when parsing frame header flags\n"
       end # parsing flags
-        
-      # generate method for parsing data
            
-      instance_eval <<-EOB
-        class << self
-
-          def parse
-            # here we GENERATE the code to parse, dump and verify  methods
-                   
-            vars,packing = ID3::FRAME_PARSER[ ID3::FrameName2FrameType[ ID3::Framename2symbol[self.version][self.name]] ]
-  
-            # debugging print-out:
-  
-            if vars.class == Array
-              vars2 = vars.join(",") 
-            else
-              vars2 = vars
-            end
-  
-            values = self.rawdata.unpack(packing)
-            vars.each { |key|
-              self[key] = values.shift
-            }
-            self.lock   # lock the OrderedHash
-          end
-  
-          def dump
-            vars,packing = ID3::FRAME_PARSER[ ID3::FrameName2FrameType[ ID3::Framename2symbol[self.version][self.name]] ]
-                      
-            data = self.values.pack(packing)     # we depend on an OrderedHash, so the values are in the correct order!!!
-            header  = self.name.dup         # we want the value! not the reference!!
-            len     = data.length
-            if self.version =~ /^2\.2\./
-              byte2,rest = len.divmod(256**2)
-              byte1,byte0 = rest.divmod(256)
-  
-              header << byte2 << byte1 << byte0
-  
-            elsif self.version =~ /^2\.[34]\./          # 10-byte header
-              byte3,rest = len.divmod(256**3)
-              byte2,rest = rest.divmod(256**2)
-              byte1,byte0 = rest.divmod(256)            
-  
-              flags1,flags0 = self.rawflags.divmod(256)
-                         
-              header << byte3 << byte2 << byte1 << byte0 << flags1 << flags0
-            end
-            header << data
-          end
-        end
-      EOB
-      self.parse           # now we're using the just defined parsing routine
+      # parse the data
+      self.class.parse(self)           
       
       if RUBY_VERSION >= "1.9.0"
         if self["encoding"] == 1
@@ -1311,12 +1308,8 @@ module ID3
     end
     # ----------------------------------------------------------------------
 
-       
-    
   end  # of class Frame
 
   # ==============================================================================
-    
-
 
 end   # of module ID3
