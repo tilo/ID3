@@ -5,7 +5,7 @@
 # Copyright (C) 2002 .. 2011 by Tilo Sloboda <firstname.lastname@google_email>
 #
 # created:      12 Oct 2002
-# updated:      Time-stamp: <Thu, 20 Oct 2011, 10:15:46 PDT  tilo>
+# updated:      Time-stamp: <Thu, 20 Oct 2011, 10:58:02 PDT  tilo>
 #
 # Docs:   http://www.id3.org/id3v2-00.txt
 #         http://www.id3.org/id3v2.3.0.txt
@@ -16,6 +16,29 @@
 #         different versions of ID3 tags, support different fields.
 #         See: http://www.unixgods.org/~tilo/Ruby/ID3/docs/ID3v2_frames_comparison.txt
 #         See: http://www.unixgods.org/~tilo/Ruby/ID3/docs/ID3_comparison2.html
+#
+# PLEASE HELP:
+#
+#  >>>    Please contact me and email me the extracted ID3v2 tags, if you:
+#  >>>      - if you have tags with exotic character encodings (exotic for me, not for you, obviously ;-) )
+#  >>>      - if you find need support for any ID3v2 tags which are not yet supported by this library
+#  >>>        (e.g. they are currently just parsed 'raw' and you need them fully parsed)
+#  >>>      - if something terribly breaks
+#  >>>   
+#  >>>    You can find a small helper program in the examples folder, which extracts a ID3v2 tag from a file,
+#  >>>    and saves it separately, so you can email it to me without emailing the whole audio file.
+#  >>>
+#  >>>    THANK YOU FOR YOUR HELP!
+#
+# Limitations:
+#
+#   - this library currently does not support the ID3v2.4 feature of having ID3v2 tags at the end of the file
+#     IMHO this doesn't make much sense in the age of streaming, and I haven't found examples for ths in any MP3-files. 
+#     I think this is just one of the many unused "features" in the ID3v2 specifications ;-)
+#
+#   - ID3v2 Chapters are not supported (see: Wikipedia)
+#
+#   - ID3v1 extended tags are currently not supported (see: Wikipedia)
 #
 # License:     
 #         Freely available under the terms of the OpenSource "Artistic License"
@@ -39,14 +62,14 @@
 #
 # Author's Rant:
 #         The author of this ID3-library for Ruby is not responsible in any way for 
-#         the definition of the ID3-standards..
+#         the awkward definition of the ID3-standards..
 #
 #         You're lucky though that you can use this little library, rather than having 
 #         to parse ID3v2 tags yourself!  Trust me!  At the first glance it doesn't seem
 #         to be so complicated, but the ID3v2 definitions are so convoluted and 
 #         unnecessarily complicated, with so many useless frame-types, it's a pain to 
-#         read the documents describing the ID3 V2.x standards.. and even worse 
-#         to implement them..  
+#         read the documents describing the ID3 V2.x standards.. with tiny bits of information
+#         strewn all accross the documents here and there..  and even worse to implement them.
 #
 #         I don't know what these people were thinking... can we make it any more 
 #         complicated than that??  ID3 version 2.4.0 tops everything!   If this flag
@@ -54,17 +77,29 @@
 #         Outch!!!  I assume that's why I don't find any 2.4.0 tags in any of my 
 #         MP3-files... seems like noone is writing 2.4.0 tags... iTunes writes 2.3.0
 #
-#         If you have some files with valid 2.4.0 tags, please send them my way! 
-#         Thank you!
+################################################################################
+# How does it work?
 #
-# Limitations:
+# Main concepts used:
 #
-#   - this library currently does not support the ID3v2.4 feature of having ID3v2 tags at the end of the file
-#     (IMHO this doesn't make much sense in the age of streaming)
+#   - Unification of ID3 Frames according to this nomenclature, using "pretty" names for frames:
+#         http://www.unixgods.org/~tilo/Ruby/ID3/docs/ID3_comparison2.html
 #
-#   - ID3v2 Chapters are not supported
+#   - String pack/unpack to parse and dump contents of ID3v2 frames; 
+#     For each ID3v2 frame type, there is a specific list of attributes for that frame 
+#     and a pack/unpack recipe associated with that frame type (see: FRAME_PARSER Hash)
 #
-#   - ID3v1 extended tags are currently not supported
+#   - if there is a ID3v2 frame that's not parsed yet, it's easy to add:
+#     - create a new entry for that frame's symbolic (pretty) name in FRAMETYPE2FRAMENAME Hash
+#     - make sure to delete that name from the "UNPARSED" category
+#     - add an entry to FRAME_PARSER Hash
+#     - note how these pre-defined Hashes are used in ID3::Frame class during parse() and dump()
+#
+#   - Metaprogramming: when ID3v2 frames are instanciated when they are read, 
+#     we define parse and dump methods individually, using above pack/unpack recipes
+#     (check the two lines which use  ID3::FRAME_PARSER to better understand the internal mechanics)
+#
+#   - 
 #
 ################################################################################
 #--
