@@ -5,7 +5,7 @@
 # Copyright (C) 2002 .. 2011 by Tilo Sloboda <firstname.lastname@google_email>
 #
 # created:      12 Oct 2002
-# updated:      Time-stamp: <Thu, 20 Oct 2011, 10:58:02 PDT  tilo>
+# updated:      Time-stamp: <Thu, 20 Oct 2011, 11:13:24 PDT  tilo>
 #
 # Docs:   http://www.id3.org/id3v2-00.txt
 #         http://www.id3.org/id3v2.3.0.txt
@@ -29,6 +29,20 @@
 #  >>>    and saves it separately, so you can email it to me without emailing the whole audio file.
 #  >>>
 #  >>>    THANK YOU FOR YOUR HELP!
+#
+# Non-ASCII encoded Strings:
+#
+#   This library's main purpose is to unify access across different ID3-tag versions. So you don't have to worry
+#   about the changing names of the frames in different ID3-versions, and e.g. just access "AUTHOR" symbolically
+#   no matter if it's ID3 v1.0 v2.1.0 or v2.4.0.  Think of this as a low-level library in that sense.
+#
+#   Non-ASCII encodings are currently not really dealt with. For Strings which can be encoded differntly, 
+#   you will see attributes like 'encoding' and 'text', where 'encoding' is a number representing the encoding,
+#   and the other attribute, e.g. 'text' or 'description', is the raw uninterpreted String.
+#
+#   If your code requires to assign values to a ID3v2-frame which are foreign encoded Strings, you will need to make
+#   a small wrapper class on top of ID3::Frame which detects the encoding and properly saves it as a number.
+#   I'd love to add this -- but I don't have enough examples of ID3-tags in foreign languages. See: PLEASE HELP
 #
 # Limitations:
 #
@@ -99,7 +113,8 @@
 #     we define parse and dump methods individually, using above pack/unpack recipes
 #     (check the two lines which use  ID3::FRAME_PARSER to better understand the internal mechanics)
 #
-#   - 
+#  - After the ID3v2 frames are parsed, they are Hashes; the keys are the attributes defined in FRAME_PARSER, 
+#    the values are the extracted data from the ID3v2 tag.
 #
 ################################################################################
 #--
