@@ -1,7 +1,7 @@
 # ==============================================================================
 # EXTENDING CLASS STRING
 # ==============================================================================
-#
+# --
 # (C) Copyright 2004 by Tilo Sloboda <tools@unixgods.org>
 #
 # License:
@@ -22,6 +22,26 @@
 #         INACCURATE OR USELESS OR LOSSES SUSTAINED BY YOU OR THIRD PARTIES OR A FAILURE OF THE PROGRAM
 #         TO OPERATE WITH ANY OTHER PROGRAMS), EVEN IF THE COPYRIGHT HOLDERS OR OTHER PARTY HAS BEEN
 #         ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+#++
+
+# this is written for Ruby version < 1.9 - unfortunately they changed the I/O and String classes significantly.
+# have to fix this up for newer Ruby versions.
+
+if RUBY_VERSION >= "1.9.0"
+  ZEROBYTE = "\x00".force_encoding(Encoding::BINARY)  unless defined? ZEROBYTE
+
+else # older Ruby versions:
+  
+  class String
+    alias bytesize size
+
+    def getbyte(x)   # when accessing a string and selecting x-th byte to do calculations , as defined in Ruby 1.9                                         
+      self[x]  # returns an integer                                                                                                                        
+    end
+  end
+
+  ZEROBYTE = "\0"  unless defined? ZEROBYTE
+end      
 
 
 class String
@@ -31,7 +51,9 @@ class String
   # parameters:     sparse:   true / false     do we want to print multiple lines with zero values?
 
   def hexdump(sparse = false)
-     selfsize = self.size
+
+    selfsize = self.bytesize
+
      first = true
 
      print "\n index       0 1 2 3  4 5 6 7  8 9 A B  C D E F\n\n"
@@ -44,13 +66,14 @@ class String
         
         # we don't print lines with all zeroes, unless it's the last line
 
-        if str == "\0"*16     # if the 16 bytes are all zero
+        if str == ZEROBYTE * 16     # if the 16 bytes are all zero
         
           if (!sparse) || (sparse &&  lines == 1 && rest == 0)
              str.tr!("\000-\037\177-\377",'.')
+
              printf( "%08x    %8s %8s %8s %8s    %s\n", 
-                address, self[i..i+3].unpack('H8'), self[i+4..i+7].unpack('H8'),
-                self[i+8..i+11].unpack('H8'), self[i+12..i+15].unpack('H8'), str)
+                address, self[i..i+3].unpack('H8').first, self[i+4..i+7].unpack('H8').first,
+                self[i+8..i+11].unpack('H8').first, self[i+12..i+15].unpack('H8').first, str)
           else
                 print "  ....      00 .. 00 00 .. 00 00 .. 00 00 .. 00    ................\n" if first
                 first = false
@@ -59,9 +82,10 @@ class String
         else  # print string which is not all zeros
 
           str.tr!("\000-\037\177-\377",'.')
+
           printf( "%08x    %8s %8s %8s %8s    %s\n", 
-                address, self[i..i+3].unpack('H8'), self[i+4..i+7].unpack('H8'),
-                self[i+8..i+11].unpack('H8'), self[i+12..i+15].unpack('H8'), str)
+                address, self[i..i+3].unpack('H8').first, self[i+4..i+7].unpack('H8').first,
+                self[i+8..i+11].unpack('H8').first, self[i+12..i+15].unpack('H8').first, str)
           first = true
 	end
         i += 16; address += 16; lines -= 1
@@ -76,7 +100,7 @@ class String
         if (i < selfsize)
            printf( "%08x    ", address)
            while (i < selfsize)
-                printf "%02x", self[i]
+                printf "%02x", self.getbyte(i)
                 i += 1; k += 1
                 print  " " if ((i % 4) == 0)
            end
@@ -97,17 +121,16 @@ end
 
 __END__
 
-require 'hexdump'
+
+# you would use it like this:
+
+require './hexdump'
 
 s =  "some random long string"
 
-t =  s << "\0"*40  << s << "\0"*32 << s << "bla bla bla!"
-t.hexdump(true)
-t.hexdump(false)
+t =  s + ZEROBYTE*80  + s + ZEROBYTE*64 + s + "bla bla bla!"
+t.hexdump(true)    # surpress consecutive lines with zero values
+t.hexdump          # same as t.hexdump(false)
 
-4.times {t.chop!}
-
-t.hexdump(true)
-t.hexdump(false)
 
 

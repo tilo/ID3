@@ -1,5 +1,18 @@
 = id3 changes
 
+=== 1.0.0_pre1 (2011-10-11 .. 2011-10-20)
+
+* added compatibility wtih Ruby 1.9 for id3 library
+* added compatibility wtih Ruby 1.9 for hexdump extension of String
+* updated invert_hash extension
+* added extensions to String and IO / File classes, for additional use cases.
+* added additional ID3 class methods , with same names as extensions to String and IO / File classes
+* added support for reading ID3v2 tag from remote location / partially copied MP3-file
+* fixed bugs in reporting ID3v1 tag version
+* the library now parses PLAYCOUNTER and POPULARIMETER frames correctly
+* the library now handles multiple appearances of ID3v2 frames correcly (returning an ID3::FrameArray < Array )
+* added examples to the code
+
 === 0.5.0 (2008-08-18)
 
 * Added write support

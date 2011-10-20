@@ -1,6 +1,6 @@
 spec = Gem::Specification.new do |s|
   s.name = 'id3'
-  s.version = '0.5.1'
+  s.version = '1.0.0_pre1'
   s.author = 'Tilo Sloboda'
   s.email  = 'firstname.lastname@google.com'
   s.homepage = 'http://www.unixgods.org/~tilo/Ruby/ID3'
@@ -13,7 +13,8 @@ spec = Gem::Specification.new do |s|
   s.require_path = 'lib'
   s.autorequire = 'id3'
 #  s.extra_rdoc_files = ['README']
-  s.rdoc_options << '--title' <<  'Builder -- Easy XML Building'
+  s.rdoc_options << '--title' <<  'Native ID3 Ruby Library - uniform acecss to ID3v1 and ID3v2 tags'
+  s.add_dependency("active_support")
 #  s.add_dependency("dependency", ">= 0.9.9")
 #  s.bindir = 'bin'
 
