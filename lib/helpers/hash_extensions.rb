@@ -5,7 +5,7 @@
 # include Hash#inverse from Facets of Ruby or from our helper
 # then Monkey-Patch the Hash#invert method:
 
-require 'invert_hash'
+require 'helpers/invert_hash'
 
 class Hash
   # original Hash#invert is still available as Hash#old_invert
