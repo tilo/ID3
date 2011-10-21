@@ -4,7 +4,7 @@ require 'awesome_print'
 require 'id3'
 
 
-require '../helpers/recursive_helper'
+require '../lib/helpers/recursive_helper'
 
 
 # ------------------------------------------------------------------------------
