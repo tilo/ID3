@@ -1,10 +1,3 @@
-if ENV['DEBUG']
-  require 'awesome_print'
-
-  $:.unshift Dir.pwd
-  puts "Load Path is: "
-  ap $:
-end
 
 require 'tempfile'
 require 'active_support'       # we'll borrow OrdreedHash from here.. no need to reinvent the wheel
