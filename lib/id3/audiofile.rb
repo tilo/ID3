@@ -47,13 +47,13 @@ class AudioFile
     audioEndX     = File.size(filename) - 1  # points to the last index
 
     if ID3.hasID3v1tag?(@filename)
-      @tagID3v1 = Tag1.new
+      @tagID3v1 = ID3::Tag1.new
       @tagID3v1.read(@filename)
 
       audioEndX -= ID3::ID3v1tagSize
     end
     if ID3.hasID3v2tag?(@filename) 
-      @tagID3v2 = Tag2.new
+      @tagID3v2 = ID3::Tag2.new
       @tagID3v2.read(@filename)
 
       audioStartX = @tagID3v2.raw.size
