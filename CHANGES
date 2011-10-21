@@ -1,6 +1,6 @@
 = id3 changes
 
-=== 1.0.0_pre1 (2011-10-11 .. 2011-10-20)
+=== 1.0.0_pre1 (2011-10-11 .. 2011-10-20 working on pre-release of 1.0.0 version)
 
 * added compatibility wtih Ruby 1.9 for id3 library
 * added compatibility wtih Ruby 1.9 for hexdump extension of String
