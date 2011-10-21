@@ -5,7 +5,7 @@
 # Copyright (C) 2002 .. 2011 by Tilo Sloboda <firstname.lastname@google_email>
 #
 # created:      12 Oct 2002
-# updated:      Time-stamp: <Thu, 20 Oct 2011, 11:13:24 PDT  tilo>
+# updated:      Time-stamp: <Fri, 21 Oct 2011, 09:57:10 PDT  tilo>
 #
 # Docs:   http://www.id3.org/id3v2-00.txt
 #         http://www.id3.org/id3v2.3.0.txt
@@ -745,7 +745,7 @@ module ID3
       attr_reader :pwd,          :filename      # PWD and relative path/name how file was first referenced
       attr_reader :dirname,      :basename      # absolute dirname and basename of the file (computed)
 
-      attr_accessor :tagID3v1, :tagID3v2
+      attr_accessor :tagID3v1, :tagID3v2    # should make aliases id3v1_tag , id3v2_tag 
 
       # ----------------------------------------------------------------------------
       # initialize
