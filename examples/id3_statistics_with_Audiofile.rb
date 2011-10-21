@@ -1,14 +1,10 @@
 
 require 'awesome_print'
 
-require '../lib/id3'
+require 'id3'
 
 
-
-require 'helpers/recursive_helper'
-# require 'helpers/invert_hash'
-
-
+require '../helpers/recursive_helper'
 
 
 # ------------------------------------------------------------------------------
