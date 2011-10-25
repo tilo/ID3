@@ -30,16 +30,16 @@ module ID3
         return false if string.size < size
         @raw = string[0...size]
         # parse the raw flags:
-        if (@rawflags & TAG_HEADER_FLAG_MASK[@version] != 0)
+        if (@rawflags & ID3::TAG_HEADER_FLAG_MASK[@version] != 0)
           # in this case we need to skip parsing the frame... and skip to the next one...
-          wrong = @rawflags & TAG_HEADER_FLAG_MASK[@version]
+          wrong = @rawflags & ID3::TAG_HEADER_FLAG_MASK[@version]
           error = printf "ID3 version %s header flags 0x%X contain invalid flags 0x%X !\n", @version, @rawflags, wrong
           raise ArgumentError, error
         end
         
         @flags = Hash.new
         
-        TAG_HEADER_FLAGS[@version].each{ |key,val|
+        ID3::TAG_HEADER_FLAGS[@version].each{ |key,val|
           # only define the flags which are set..
           @flags[key] = true   if  (@rawflags & val == 1)
         }
@@ -78,16 +78,16 @@ module ID3
         @raw = f.read(size) 
         
         # parse the raw flags:
-        if (@rawflags & TAG_HEADER_FLAG_MASK[@version] != 0)
+        if (@rawflags & ID3::TAG_HEADER_FLAG_MASK[@version] != 0)
           # in this case we need to skip parsing the frame... and skip to the next one...
-          wrong = @rawflags & TAG_HEADER_FLAG_MASK[@version]
+          wrong = @rawflags & ID3::TAG_HEADER_FLAG_MASK[@version]
           error = printf "ID3 version %s header flags 0x%X contain invalid flags 0x%X !\n", @version, @rawflags, wrong
           raise ArgumentError, error
         end
         
         @flags = Hash.new
         
-        TAG_HEADER_FLAGS[@version].each{ |key,val|
+        ID3::TAG_HEADER_FLAGS[@version].each{ |key,val|
           # only define the flags which are set..
           @flags[key] = true   if  (@rawflags & val == 1)
         }
@@ -202,7 +202,7 @@ module ID3
       # 
       if ID3::SUPPORTED_SYMBOLS[@version].has_value?(framename)
         frame = ID3::Frame.new(self, framename, x, x+frameHeaderSize , x+frameHeaderSize + size - 1 , flags)
-        self[ Framename2symbol[@version][frame.name] ] = frame
+        self[ ID3::Framename2symbol[@version][frame.name] ] = frame
         return size+frameHeaderSize , frame
       else
         return 0, nil

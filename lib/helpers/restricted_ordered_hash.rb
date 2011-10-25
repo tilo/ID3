@@ -30,7 +30,7 @@ class RestrictedOrderedHash < ActiveSupport::OrderedHash
       # strictly speaking, we only need this for the ID3v2 Tag class Tag2:
       if self[key].class != ID3::FrameArray   # Make this ID3::FrameArray < Array
         old_value = self[key]
-        new_value = FrameArray.new
+        new_value = ID3::FrameArray.new
         new_value << old_value           # make old_value a FrameArray
         self.old_store(key, new_value  )
       end
