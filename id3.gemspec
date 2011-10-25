@@ -1,6 +1,6 @@
 spec = Gem::Specification.new do |s|
   s.name = 'id3'
-  s.version = '1.0.0.pre1'
+  s.version = '1.0.0.pre2'
   s.author = 'Tilo Sloboda'
   s.email  = 'firstname.lastname@google.com'
   s.homepage = 'http://www.unixgods.org/~tilo/Ruby/ID3'
