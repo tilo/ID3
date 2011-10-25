@@ -115,29 +115,3 @@ ONLY ID3v2 Tag:  #{@only_id3v1_tagN}
 puts "\n\ndone."
 
 
-exit
-
-
-
-# ----- BAUSTELLE: --------------------
-
-require 'active_support'
-
-
-class Hash
-
-  def inverse
-    i = ActiveSupport::OrderedHash.new
-    self.each_pair{ |k,v|
-      if (v.class == Array)
-        v.each{ |x|
-          i[x] = i.has_key?(x) ? [i[x],k].flatten : k
-        }
-      else
-        i[v] = i.has_key?(v) ? [i[v],k].flatten : k
-      end
-    }
-    return i
-  end
-
-end

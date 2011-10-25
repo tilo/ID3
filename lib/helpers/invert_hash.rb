@@ -4,7 +4,7 @@
 #--
 # (C) Copyright 2004 by Tilo Sloboda <tools@unixgods.org>
 #
-# updated:  Time-stamp: <Wed, 12 Oct 2011, 06:59:45 PDT  tilo>
+# updated:  Time-stamp: <Mon, 24 Oct 2011, 23:03:29 PDT  tilo>
 #
 # License:
 #         Freely available under the terms of the OpenSource "Artistic License"
@@ -105,3 +105,24 @@ class Hash
 end
 
 
+#--
+# 
+# require 'active_support'
+# 
+# class Hash
+# 
+#   def inverse
+#     i = ActiveSupport::OrderedHash.new
+#     self.each_pair{ |k,v|
+#       if (v.class == Array)
+#         v.each{ |x|
+#           i[x] = i.has_key?(x) ? [i[x],k].flatten : k
+#         }
+#       else
+#         i[v] = i.has_key?(v) ? [i[v],k].flatten : k
+#       end
+#     }
+#     return i
+#   end
+# 
+# end
