@@ -20,7 +20,7 @@ def each_song(filename)
     return
   end
 
-  mp3 = ID3::AudioFile.new(filename)   # CAN WE CALL THIS WITH A BLOCK??
+  mp3 = AudioFile.new(filename)   # CAN WE CALL THIS WITH A BLOCK??
   if mp3.id3_versions.empty?
     @no_id3_tagN += 1
     puts "NO ID3 TAGS: #{filename}"   # better to know this, hum?

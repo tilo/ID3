@@ -1,3 +1,5 @@
+require 'id3/frame_array'
+
 # ==============================================================================
 # Class RestrictedOrderedHash
 #    this is a helper Class for ID3::Frame
@@ -26,7 +28,7 @@ class RestrictedOrderedHash < ActiveSupport::OrderedHash
       #            self.old_store(key,val)    # this would overwrite the old_value if a key already exists (duplicate ID3-Frames)
       
       # strictly speaking, we only need this for the ID3v2 Tag class Tag2:
-      if self[key].class != FrameArray   # Make this ID3::FrameArray < Array
+      if self[key].class != ID3::FrameArray   # Make this ID3::FrameArray < Array
         old_value = self[key]
         new_value = FrameArray.new
         new_value << old_value           # make old_value a FrameArray
