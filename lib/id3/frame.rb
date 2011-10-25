@@ -127,15 +127,7 @@ module ID3
           
             vars,packing = ID3::FRAME_PARSER[ ID3::FrameName2FrameType[ ID3::Framename2symbol[self.version][self.name]] ]
 
-            #                    puts "TAG NAME: #{self.name}"
-            #                    puts "RAW TAG: #{self.rawdata.hexdump}"
-            #                    puts "Vars:" + vars.inspect
-            #                    puts "Packing: " + packing.inspect
-            
             values = self.rawdata.unpack(packing)
-            
-            #                    puts "VALUES = " 
-            #                    pp values
 
             vars.each do |key|
               self[key] = values.shift
