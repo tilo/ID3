@@ -15,7 +15,8 @@ module ID3
   #           Whereas when you read the ID3v2 tag, the object for the frame is ID3::Frame
 
   class GenericTag < RestrictedOrderedHash
-    attr_reader :version, :raw
+    attr_accessor :version
+    attr_reader   :raw
 
     # these definitions are to prevent users from inventing their own field names..
     # but on the other hand, they should be able to create a new valid field, if

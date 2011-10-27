@@ -10,13 +10,13 @@ module ID3
   #      as per definition, the frames are in no fixed order
   
   class Tag2 < GenericTag
-    
     attr_reader :rawflags, :flags
-    
-    def initalize
+
+    def initialize
+      super
       @rawflags = 0
       @flags    = {}
-      super
+      @version  = '2.3.0'   # default version
     end
 
     def read_from_buffer(string)
