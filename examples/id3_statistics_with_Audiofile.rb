@@ -51,9 +51,7 @@ end
 
 
 
-mp3_library_dir = '~/Music/iTunes/iTunes Music'  # e.g. on a Mac
-
-mp3_library_dir = '/Users/tilo/Music/iTunes/iTunes Music'
+mp3_library_dir = File.join(  ENV['HOME'] , 'Music/iTunes/iTunes Music')  # e.g. on a Mac
 
 @dirN = 0
 @fileN = 0
