@@ -5,17 +5,19 @@ It supports reading and writing ID3-tag versions 1.0, 1.1, and 2.2.x, 2,3.x, 2,4
 # NOTE
 the latest version on the trunk is version 1.0.0_pre4 , a pre-release which aims at Ruby 1.9 compatibility
 
-*Author:     Tilo Sloboda <MyFristname.MyLastname At GoogleMail>
+Author:     Tilo Sloboda <MyFristname.MyLastname At GoogleMail>
 
-*Home Page:  http://www.unixgods.org/~tilo/Ruby/ID3
+Home Page:  http://www.unixgods.org/~tilo/Ruby/ID3
 
-*Download:   http://www.unixgods.org/~tilo/Ruby/ID3.tar.gz
+Download:   http://www.unixgods.org/~tilo/Ruby/ID3.tar.gz
 
-*License:    http://www.unixgods.org/~tilo/artistic-license.html
+License:    http://www.unixgods.org/~tilo/artistic-license.html
 
-*RAA:        http://raa.ruby-lang.org/project/id3tag/
-*RubyForge:  http://rubyforge.org/projects/id3/
-*GitHub:     https://github.com/tilo/ID3
+RAA:        http://raa.ruby-lang.org/project/id3tag/
+
+RubyForge:  http://rubyforge.org/projects/id3/
+
+GitHub:     https://github.com/tilo/ID3
 
 #NOTE: 
 
