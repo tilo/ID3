@@ -86,34 +86,34 @@ end
 
 # EXAMPLE tagging an existing MP3 track..
 
-file = "reeeee.mp3"
+file = "/tmp/rheeeeet.mp3"    # ./examples/mp3/rheeeeet.mp3
 
+if ! ID3.hasID3v2tag?(file)     # if there is no v2 tag 
 
-if ! ID3::has_id3v2_tag?( file )        # if there is no v2 tag 
-
-   myfile = AudioFile.open( file )        # do we need a new here?
+   myfile = AudioFile.new( file )        # do we need a new here?
    
-   newtag = ID3v2tag("2.3.0")             # create a new,empty v2 tag
-   newtag["TITLE"] = "Reeeee!"
+   newtag = ID3::Tag2.new                # create a new,empty v2 tag
+   newtag.version = '2.3.0'
+   newtag["TITLE"] = "Reeeeet!"
    newtag["ARTIST"] = "Dan Mosedale"
    newtag["LYRICIST"] = "Dan Mosedale"
    newtag["COMPOSER"] = "Dan Mosedale"
    newtag["LANGUAGE"] = "Monkey"          # should raise an error, because there is no 
                                           # ISO language code for "Monkey"
                                           
-   newtag["BAND"] = "Mozilla and the Butt Monkeys"
-   newtag["TRACKNUM"] = 1                 # will be converted to "1"
+   newtag["BAND"] = "Mozilla and the ButtMonkeys"
+   newtag["TRACKNUM"] = '1'               # will be converted to "1"
    newtag["DATE"] = "2000/05/02"          # will be converted to correct date format
    
-   newtag["COMMENT"] = "The sound which monkeys make when they are flying out of someones butt.."
+   newtag["COMMENT"] = "The sound which monkeys make when they are flying out of someones butt..   Which is refering to the estimated release date of Netscape 6. See: https://wiki.mozilla.org/SeaMonkey:Name_And_Version"
    
    newtag.options["PADDINGSIZE"] = 0
 
-   myfile.id3v2tag = newtag         # assoziate the new tag with the AudioFile..
+   myfile.tagID3v2 = newtag         # assoziate the new tag with the AudioFile..
                                     # NOTE: we should CHECK when assigning a tag, 
                                     #       that the version number matches!
 
-   myfile.write(file)               # if we overwrite, we should save the old tag in "filename.oldtag"
+   myfile.write               # if we overwrite, we should save the old tag in "filename.oldtag"
    myfile.close
 end      
 ------------------------------------------------------------------------------

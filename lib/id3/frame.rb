@@ -63,23 +63,26 @@ module ID3
       return @rawheader + @rawdata
     end    
     # ----------------------------------------------------------------------
-    alias old_init initialize
-    
-    def initialize(tag, name, headerStartX, dataStartX, dataEndX, flags)
+
+    def initialize(name, version = '2.3.0', flags = 0, tag,  headerStartX, dataStartX, dataEndX )
+      super
+
       @name = name
-      @headerStartX = headerStartX
-      @dataStartX   = dataStartX
-      @dataEndX     = dataEndX
+      @headerStartX = headerStartX if headerStartX
+      @dataStartX   = dataStartX   if dataStartX
+      @dataEndX     = dataEndX     if dataEndX
 
-      @rawdata   = tag.raw[dataStartX..dataEndX]
-      @rawheader = tag.raw[headerStartX..dataStartX-1]
+      if tag
+        @rawdata   = tag.raw[dataStartX..dataEndX]
+        @rawheader = tag.raw[headerStartX..dataStartX-1]
+        # parse the darn flags, if there are any..
+        @version = tag.version  # caching..
+      else
+        @rawdata = ''
+        @rawheader= ''
+        @version = version
+      end
 
-      # initialize the super class..
-      old_init
-      
-      # parse the darn flags, if there are any..
-
-      @version = tag.version  # caching..
       case @version
       when /2\.2\.[0-9]/
         # no flags, no extra attributes necessary

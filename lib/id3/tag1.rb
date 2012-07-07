@@ -9,6 +9,11 @@ module ID3
 
   class Tag1 < GenericTag
 
+    def initialize
+      super
+      @version = '1.1'
+    end
+
     # ----------------------------------------------------------------------
     # read     reads a version 1.x ID3tag
     #

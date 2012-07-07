@@ -19,6 +19,21 @@ module ID3
       @version  = '2.3.0'   # default version
     end
 
+    # this is obviously half-baked.. does not really work!  We need SubClasses of ID3::Frame with specific handling
+    #
+    def []=(framename,val)
+      # if this is a valid frame of known type, we return it's total length and a struct
+      #
+      if ID3::SUPPORTED_SYMBOLS[@version].has_value?(framename)
+        frame = ID3::Frame.new( framename, @version)
+        self[ framename ] = frame
+        frame['text'] = val  if frame.has_key?('text')
+        return frame
+      else
+        return nil
+      end
+    end
+
     def read_from_buffer(string)
       has_tag = string =~ /^ID3/
       if has_tag
@@ -201,7 +216,7 @@ module ID3
       # if this is a valid frame of known type, we return it's total length and a struct
       # 
       if ID3::SUPPORTED_SYMBOLS[@version].has_value?(framename)
-        frame = ID3::Frame.new(self, framename, x, x+frameHeaderSize , x+frameHeaderSize + size - 1 , flags)
+        frame = ID3::Frame.new( framename, @version , flags, self,  x, x+frameHeaderSize , x+frameHeaderSize + size - 1 )
         self[ ID3::Framename2symbol[@version][frame.name] ] = frame
         return size+frameHeaderSize , frame
       else
