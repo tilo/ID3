@@ -1,7 +1,8 @@
 = id3 changes
 
-=== 1.0.0_pre1 (2011-10-11 .. 2011-10-20 working on pre-release of 1.0.0 version)
+=== 1.0.0_pre4 (2011-10-11 .. 2011-10-20 working on pre-release of 1.0.0 version)
 
+* changed format of Frame.new() initializer method
 * added compatibility wtih Ruby 1.9 for id3 library
 * added compatibility wtih Ruby 1.9 for hexdump extension of String
 * updated invert_hash extension
