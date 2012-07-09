@@ -2,6 +2,10 @@
 native Ruby ID3 tag library, which does not depend on architecture-dependent C-libraries. 
 It supports reading and writing ID3-tag versions 1.0, 1.1, and 2.2.x, 2,3.x, 2,4.x
 
+Initial release was 12 Oct 2002
+
+The library uses Metaprogramming at it's core - see ./lib/id3/frame.rb
+
 # NOTE
 the latest version on the trunk is version 1.0.0_pre4 , a pre-release which aims at Ruby 1.9 compatibility
 
@@ -17,10 +21,6 @@ RubyForge:  http://rubyforge.org/projects/id3/
 
 RAA:        http://raa.ruby-lang.org/project/id3tag/  (yes, it's that old :) )
 
-#NOTE: 
-
-   Initial release was 12 Oct 2002
-   The library uses Metaprogramming at it's core - see ./lib/id3/frame.rb
 
 
 Versions:  
