@@ -7,7 +7,10 @@ Initial release was 12 Oct 2002
 The library uses Metaprogramming at it's core - see ./lib/id3/frame.rb
 
 # NOTE
-the latest version on the trunk is version 1.0.0_pre4 , a pre-release which aims at Ruby 1.9 compatibility
+the latest version on the trunk is version 1.0.0_pre4 , a pre-release which aims at Ruby 1.9 compatibility.
+
+Due to a RubyGems.org hickup I currently can not push the pre4 release as a Gem, but will do so soon.
+
 
 Author:     Tilo Sloboda <MyFristname.MyLastname At GoogleMail>
 
