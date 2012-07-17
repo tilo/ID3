@@ -18,7 +18,8 @@ spec = Gem::Specification.new do |s|
 #  s.add_dependency("dependency", ">= 0.9.9")
 #  s.bindir = 'bin'
 
-  s.rubyforge_project = 'id3'
+#  s.rubyforge_project = 'id3'
+  s.rubyforge_project = ['none']
 end
 
 #Rake::GemPackageTask.new(spec) do |pkg|
