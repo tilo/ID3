@@ -65,7 +65,7 @@ module ID3
     # ----------------------------------------------------------------------
 
     def initialize(name, version = '2.3.0', flags = 0, tag,  headerStartX, dataStartX, dataEndX )
-      super
+      super() # Don't pass the arguments through to the ordered hash.
 
       @name = name
       @headerStartX = headerStartX if headerStartX
