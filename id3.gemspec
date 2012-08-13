@@ -14,7 +14,7 @@ spec = Gem::Specification.new do |s|
   s.autorequire = 'id3'
 #  s.extra_rdoc_files = ['README']
   s.rdoc_options << '--title' <<  'Native ID3 Ruby Library - uniform acecss to ID3v1 and ID3v2 tags'
-  s.add_dependency("active_support")
+  s.add_dependency("activesupport")
 #  s.add_dependency("dependency", ">= 0.9.9")
 #  s.bindir = 'bin'
 
