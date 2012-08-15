@@ -7,7 +7,7 @@ Initial release was 12 Oct 2002
 The library uses Metaprogramming at it's core - see ./lib/id3/frame.rb
 
 # NOTE
-the latest version on the trunk is version 1.0.0_pre4 , a pre-release which aims at Ruby 1.9 compatibility.
+the latest version on the trunk is version 1.0.0_pre6 , a pre-release which aims at Ruby 1.9 compatibility.
 
 
 Author:     Tilo Sloboda <MyFristname.MyLastname At GoogleMail>
@@ -26,7 +26,9 @@ RAA:        http://raa.ruby-lang.org/project/id3tag/  (yes, it's that old :) )
 
 Versions:  
 
-* 1.0.0_pre4 [2012-07-07]
+* 1.0.0_pre6 [2012-08-15]
+* 1.0.0_pre5 [2012-08-14]
+* 1.0.0_pre4 [2012-07-17]
 * 0.5.1 (2011-03-31)
 * 0.5.0 (2008-08-18) 
 * 0.4.1 (2008-08-17)
