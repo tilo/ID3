@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
-require "ID3/version"
+require "id3/version"
 
 spec = Gem::Specification.new do |s|
   s.name = 'id3'
