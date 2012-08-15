@@ -14,6 +14,7 @@ require "helpers/hexdump"           # only needed for debugging -> autoload
 require 'id3/string_extensions'     # adds ID3 methods to String
 require 'id3/io_extensions'         # adds ID3 methods to IO and File
 
+require 'id3/version'               # Gem Version
 require 'id3/constants'             # Constants used throughout the code
 require 'id3/module_methods'        # add ID3 methods to ID3 which operate on filenames
 

@@ -3,7 +3,7 @@ module ID3
   # ----------------------------------------------------------------------------
   #    CONSTANTS
   # ----------------------------------------------------------------------------
-  Version = '1.0.0_pre5'
+  Version = VERSION
 
   ID3v1tagSize     = 128     # ID3v1 and ID3v1.1 have fixed size tags
   ID3v1versionbyte = 125
