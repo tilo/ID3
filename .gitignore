@@ -17,3 +17,6 @@ db/*.sqlite3
 .git.old
 *.bak
 *.new
+doc
+pkg
+*.gem
