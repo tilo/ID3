@@ -14,6 +14,8 @@ Author:     Tilo Sloboda <MyFristname.MyLastname At GoogleMail>
 
 Home Page:  http://www.unixgods.org/Ruby/ID3/docs/index.html
 
+Comparison of different ID3 Standards: http://www.unixgods.org/Ruby/ID3/docs/ID3_comparison.html
+
 License:    http://www.unixgods.org/~tilo/artistic-license.html
 
 GitHub:     https://github.com/tilo/ID3
