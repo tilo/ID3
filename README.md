@@ -12,7 +12,7 @@ the latest version on the trunk is version 1.0.0_pre6 , a pre-release which aims
 
 Author:     Tilo Sloboda <MyFristname.MyLastname At GoogleMail>
 
-Home Page:  http://www.unixgods.org/~tilo/Ruby/ID3
+Home Page:  http://www.unixgods.org/Ruby/ID3/docs/index.html
 
 License:    http://www.unixgods.org/~tilo/artistic-license.html
 
