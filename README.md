@@ -30,6 +30,7 @@ RAA:        http://raa.ruby-lang.org/project/id3tag/  (yes, it's that old :) )
 
 Versions:  
 
+* 1.0.0 (2025-02-02)
 * 1.0.0_pre6 [2012-08-15]
 * 1.0.0_pre5 [2012-08-14]
 * 1.0.0_pre4 [2012-07-17]
